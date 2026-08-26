@@ -1,0 +1,20 @@
+{
+  "id": "month-of-year",
+  "version": 1,
+  "title": "Green Rate by Month",
+  "category": "seasonality",
+  "summary": "The share of sessions closing above their open, split by calendar month (1-12). Each row's denominator is that month's sessions pooled across every year in your data; the numerator is the green ones. Even a decade of history gives each month only a couple hundred sessions, so read the per-month N and interval before crediting a seasonal story — and group by year instead for the quickest check on whether a pattern survived time.",
+  "outcome": "closeGreen",
+  "groupBy": "month",
+  "deltas": [
+    "monthly split over your full history, with N and 95% CI per month",
+    "swap the grouping to year to see whether the pattern is stable or a two-year artifact",
+    "any condition narrows the split without a new report"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "seasonality-chart"
+    }
+  ]
+}

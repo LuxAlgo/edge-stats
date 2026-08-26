@@ -1,0 +1,24 @@
+{
+  "//": "Human-accepted baselines for Library citations. concept/<slug> entries pin the sha256 of the public markdown definition (/library/concept/<slug>.md); a { status: 'unverified' } entry marks a citation the last --update run could not reach and is skipped with a warning until a networked --update blesses it. Verified indicators are existence-checked live and never stored. Managed by scripts/check-library-parity.mjs — update with: node scripts/check-library-parity.mjs --update",
+  "concept/candlestick-patterns": {
+    "sha256": "32b1c7e062a9234036fc7534da78b248c5e247d2fcdb809872ffa58ddf3dc5b5"
+  },
+  "concept/engulfing-bar": {
+    "sha256": "c38095770fbffcd6f9b9ab45b6a9c2738684b101387057d68f5a2b824e4532d4"
+  },
+  "concept/gap-and-go": {
+    "sha256": "32cc7a0adbee7ad96d7b9f83a7f544379670794aebd8c21e8d3bb95263d9d060"
+  },
+  "concept/gap-fill": {
+    "sha256": "7c8f0f1d3a47d22d6772c912c9206e47b2354dde387577d31b90471cba1c3fb3"
+  },
+  "concept/initial-balance": {
+    "sha256": "287c208121eaae624e321b253807973eb188b09f1af031ad4565cb4b10a91e97"
+  },
+  "concept/session-high-low-statistics": {
+    "sha256": "b4cb53d46180f8758910c0338807add9aa30c6052c72e2efad5f5f13b22e9e44"
+  },
+  "concept/session-open-close-behaviors": {
+    "sha256": "922022e7d9dc3c34e257a8185c6f7ff8e21f7d9bb98b7783deb0de3860b4536f"
+  }
+}

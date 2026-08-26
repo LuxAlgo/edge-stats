@@ -1,0 +1,28 @@
+{
+  "id": "streak-continuation",
+  "version": 1,
+  "title": "Green Streak Continuation",
+  "category": "streaks",
+  "summary": "After at least n consecutive green sessions, how often the next one closed green as well — the streak extending one more session. The denominator is sessions immediately preceded by a green run of length n or more; the numerator is the ones that closed above their open. Read it against the baseline green rate and against streak-reversion: continuation above baseline and reversion above baseline cannot both be true on the same data.",
+  "outcome": "closeGreen",
+  "params": [
+    {
+      "name": "n",
+      "type": "number",
+      "default": 3,
+      "doc": "Minimum length of the preceding green streak.",
+      "fragment": "streak(green, {value})"
+    }
+  ],
+  "deltas": [
+    "one parameterized query replaces a table of fixed streak lengths",
+    "the same definition drives reversion and continuation, so the two are directly comparable",
+    "N + 95% CI + stability split on every number"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "session-streaks"
+    }
+  ]
+}

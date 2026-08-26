@@ -1,0 +1,14 @@
+{
+  "id": "event-day-opex",
+  "version": 1,
+  "title": "OPEX Day Green Rate",
+  "category": "events",
+  "summary": "Of the sessions falling on monthly options expiration, how often the session closed above its open. The denominator is OPEX dates present in your bars (the OPEX calendar ships with the engine: rule-generated third Fridays, shifted to the prior business day around full-day holidays); the numerator is the green ones. About twelve sessions a year means N grows slowly — the intervals will be wide for years, and the result says so.",
+  "outcome": "closeGreen",
+  "where": "eventDay('OPEX')",
+  "deltas": [
+    "expiration dates are versioned data with a stated rule, not a hand-kept list",
+    "the same flag filters any other preset (gap fill on OPEX, ORB on OPEX, ...)",
+    "N + 95% CI + per-year counts on every number"
+  ]
+}

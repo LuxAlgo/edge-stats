@@ -1,0 +1,49 @@
+# npm release with provenance attestations. Manual, deliberate, and gated:
+# publishing requires either npm Trusted Publishing configured for this
+# repository (preferred; no token) or an NPM_TOKEN secret with publish
+# rights to the @luxalgo scope. Runs the full quality gates first.
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      dist_tag:
+        description: "npm dist-tag"
+        required: true
+        default: "latest"
+
+permissions:
+  contents: read
+  id-token: write # provenance attestations
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint --max-warnings 0
+      - run: pnpm typecheck
+      - run: pnpm test:run
+      - run: node scripts/check-licenses.mjs
+      # Publishing note: the packages currently export TypeScript sources
+      # for in-repo use; a dist build step must land here (build, then
+      # remap exports via publishConfig) before the first real publish.
+      # This workflow intentionally fails until that step exists, so a
+      # half-configured release can never reach the registry.
+      - name: Publish (provenance)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "release pipeline not armed: add the dist build + publishConfig remap first"
+          exit 1
+          # pnpm --filter @luxalgo/edge-stats publish --provenance --tag "${{ inputs.dist_tag }}"
+          # pnpm --filter @luxalgo/edge-stats-cli publish --provenance --tag "${{ inputs.dist_tag }}"
+          # pnpm --filter @luxalgo/edge-stats-mcp publish --provenance --tag "${{ inputs.dist_tag }}"

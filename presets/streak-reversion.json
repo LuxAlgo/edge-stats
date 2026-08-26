@@ -1,0 +1,28 @@
+{
+  "id": "streak-reversion",
+  "version": 1,
+  "title": "Red Streak Reversion",
+  "category": "streaks",
+  "summary": "After at least n consecutive red sessions, how often the next one closed green. The denominator is sessions immediately preceded by a red run of length n or more; the numerator is the ones that closed above their open. 'Due for a bounce' is exactly the claim this lets you check instead of assume — compare against the baseline green rate, and expect N to shrink fast as n grows, which is what the guards are for.",
+  "outcome": "closeGreen",
+  "params": [
+    {
+      "name": "n",
+      "type": "number",
+      "default": 3,
+      "doc": "Minimum length of the preceding red streak.",
+      "fragment": "streak(red, {value})"
+    }
+  ],
+  "deltas": [
+    "n is a parameter — every streak length is one run, not one report",
+    "open-to-close return distribution shows size, not just direction",
+    "N + 95% CI + guards make thin long-streak samples visibly thin"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "session-streaks"
+    }
+  ]
+}

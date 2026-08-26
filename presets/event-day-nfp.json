@@ -1,0 +1,14 @@
+{
+  "id": "event-day-nfp",
+  "version": 1,
+  "title": "NFP Day Green Rate",
+  "category": "events",
+  "summary": "Of the sessions whose trade date is in the NFP calendar, how often the session closed above its open. The denominator is Employment Situation release dates present in both your bars and the events data; the numerator is the green ones. The NFP date file is compiled from the BLS release schedule and ships separately — until it is present this preset reports zero matching sessions rather than a guess.",
+  "outcome": "closeGreen",
+  "where": "eventDay('NFP')",
+  "deltas": [
+    "one predicate covers the whole event family — swap the name, keep the statistics",
+    "compose with gap or range conditions to ask sharper event-day questions",
+    "per-year counts expose regime changes around the release"
+  ]
+}

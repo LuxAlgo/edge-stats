@@ -1,0 +1,27 @@
+# Scheduled data-health check, not a PR gate: watches the coverage horizons
+# declared by data/holidays/*.json and data/events/*.json and goes red when
+# any horizon is within 120 days of lapsing (or already past), so calendars
+# get extended and re-verified before queries silently run out of data.
+# scripts/check-freshness.mjs names the extension path per file.
+#
+# Scheduled + manual only. Do NOT add this to branch protection or required
+# PR checks — an approaching horizon must never block an unrelated merge.
+# The ci.yml quality job runs the same script with a lenient --min-days 30
+# so a merely-old checkout cannot fail a PR spuriously.
+name: calendar-freshness
+
+on:
+  schedule:
+    - cron: "37 5 * * *" # daily, 05:37 UTC — off the top of the hour
+  workflow_dispatch:
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Node built-ins only — no pnpm, no install.
+      - run: node scripts/check-freshness.mjs

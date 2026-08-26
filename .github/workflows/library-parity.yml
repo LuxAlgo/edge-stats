@@ -1,0 +1,31 @@
+# Scheduled data-health check, not a PR gate: every Library page cited by
+# the registry (packages/core/src/registry) and the presets must still
+# exist, and concept definition text must still match the sha256 a human
+# last accepted into data/library-parity.lock.json.
+#
+#   exit 1 — a cited page is gone (rotted citation) or could not be
+#            verified: fix or remove the citation in the listed files.
+#   exit 2 — a concept's definition text changed (or was never accepted):
+#            re-read the page, confirm the engine's definition still
+#            agrees, then run `node scripts/check-library-parity.mjs
+#            --update` and commit the lock.
+#
+# Scheduled + manual only. Do NOT add this to branch protection or required
+# PR checks — external-site state must never block a merge.
+name: library-parity
+
+on:
+  schedule:
+    - cron: "51 6 * * 1" # weekly, Mondays 06:51 UTC — off the top of the hour
+  workflow_dispatch:
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Node built-ins only — no pnpm, no install.
+      - run: node scripts/check-library-parity.mjs

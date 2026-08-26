@@ -1,0 +1,37 @@
+{
+  "id": "orb-by-direction",
+  "version": 1,
+  "title": "Opening Range Break Direction",
+  "category": "opening-range",
+  "summary": "Of the sessions with a formed opening range, how often the FIRST break went the chosen way. Up-rate and down-rate share this denominator, so the two runs plus the never-broke remainder partition every session exactly. Grouped by weekday by default, since directional drift is where day-of-week claims usually live — check each row's N and interval before crediting one.",
+  "outcome": "orbBreak({window}, {dir})",
+  "params": [
+    {
+      "name": "window",
+      "type": "duration",
+      "default": 15,
+      "doc": "Opening-range window in minutes.",
+      "target": "outcome"
+    },
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down"],
+      "default": "up",
+      "doc": "First-break direction to count.",
+      "target": "outcome"
+    }
+  ],
+  "groupBy": "dayOfWeek",
+  "deltas": [
+    "any opening-range window, not a fixed menu",
+    "up and down runs share one denominator, so the partition always adds up",
+    "per-weekday N and 95% CI on the directional rate"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "ultimate-opening-range-breakout"
+    }
+  ]
+}

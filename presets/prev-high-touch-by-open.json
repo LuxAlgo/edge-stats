@@ -1,0 +1,35 @@
+{
+  "id": "prev-high-touch-by-open",
+  "version": 1,
+  "title": "Prior High Touch by Open Location",
+  "category": "levels",
+  "summary": "How often the session reached the prior session's high, given where it opened inside the prior range — by default, opens in the upper half (open position at least 0.5, where 0 is the prior low and 1 the prior high). The denominator is sessions with a prior range that opened inside the chosen band; the numerator is the ones that traded at or above the prior high. Mind the geometry: a band nearer the level mechanically shortens the distance to it, so part of any rate difference is position, not behavior. Grouped by weekday by default; regroup or ungroup per run.",
+  "outcome": "touchPrevHigh",
+  "params": [
+    {
+      "name": "minOpenPos",
+      "type": "number",
+      "default": 0.5,
+      "doc": "Only sessions that opened at least this far up the prior range (0 = prior low, 1 = prior high).",
+      "fragment": "openPosInPrevRange >= {value}"
+    },
+    {
+      "name": "maxOpenPos",
+      "type": "number",
+      "doc": "Only sessions that opened at most this far up the prior range.",
+      "fragment": "openPosInPrevRange <= {value}"
+    }
+  ],
+  "groupBy": "dayOfWeek",
+  "deltas": [
+    "open location is a continuous band, not a fixed upper-half/lower-half toggle",
+    "minutes-to-touch distribution attached to every run",
+    "per-weekday N and 95% CI on the same cut"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "session-levels-predictor"
+    }
+  ]
+}

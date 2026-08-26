@@ -1,0 +1,43 @@
+{
+  "id": "orb-target",
+  "version": 1,
+  "title": "Opening Range Extension Targets",
+  "category": "opening-range",
+  "summary": "Of the sessions whose opening range first broke in the given direction, how often price extended at least r times the range beyond the broken side. Re-run across a ladder of r values and the hit rates trace the extension curve; the attached distribution of realized extensions gives the same curve from one run. The denominator is breaking sessions only — multiply by the break rate for per-session odds.",
+  "outcome": "orbTargetHit({window}, {r}, {dir})",
+  "params": [
+    {
+      "name": "window",
+      "type": "duration",
+      "default": 15,
+      "doc": "Opening-range window in minutes.",
+      "target": "outcome"
+    },
+    {
+      "name": "r",
+      "type": "number",
+      "default": 1,
+      "doc": "Extension target in range multiples (1 = one full range beyond the broken side).",
+      "target": "outcome"
+    },
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down", "any"],
+      "default": "any",
+      "doc": "Direction of the first break.",
+      "target": "outcome"
+    }
+  ],
+  "deltas": [
+    "r is continuous — the target ladder is yours, not a fixed 0.5/1/2 menu",
+    "the realized-extension distribution shows the whole curve in one query",
+    "N + 95% CI per rung keeps thin ladders honest"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "ultimate-opening-range-breakout"
+    }
+  ]
+}

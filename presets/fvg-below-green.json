@@ -1,0 +1,20 @@
+{
+  "id": "fvg-below-green",
+  "version": 1,
+  "title": "Close Direction with an FVG Below",
+  "category": "fvg",
+  "summary": "Of the sessions that started with an unfilled session-level fair value gap entirely below the open — zones form on prior sessions only, so there is no lookahead — how often the session closed above its open. The denominator is sessions carrying such a zone at the open; the numerator is the green ones. Read it against the baseline green rate: the zone matters only if this interval and the baseline's separate, and 'no difference' is a legitimate, publishable answer.",
+  "outcome": "closeGreen",
+  "where": "fvgPresent(open, below)",
+  "deltas": [
+    "a testable FVG claim with a stated denominator, instead of chart anecdotes",
+    "swap the side or the outcome to build the full zone-context family",
+    "N + 95% CI + stability split on every number"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "fvg-sessions"
+    }
+  ]
+}

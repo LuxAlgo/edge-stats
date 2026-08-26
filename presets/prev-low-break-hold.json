@@ -1,0 +1,19 @@
+{
+  "id": "prev-low-break-hold",
+  "version": 1,
+  "title": "Prior Low Break and Hold",
+  "category": "levels",
+  "summary": "Of the sessions that traded at or below the prior session's low, how often they also CLOSED below it. The denominator is touching sessions only: this is acceptance below the level versus rejection back above it, not the touch frequency itself. The complement of the estimate, over the same N, is the rejection rate at the prior low.",
+  "outcome": "breakHoldPrevLow",
+  "deltas": [
+    "the mirror of prev-high-break-hold, on identical definitions — asymmetry becomes measurable",
+    "any registry condition narrows the denominator explicitly",
+    "N + 95% CI + per-year counts on every number"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "session-levels-predictor"
+    }
+  ]
+}

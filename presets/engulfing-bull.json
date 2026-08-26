@@ -1,0 +1,24 @@
+{
+  "id": "engulfing-bull",
+  "version": 1,
+  "title": "Bullish Engulfing Follow-Through",
+  "category": "session-shape",
+  "summary": "Of the sessions whose green body engulfed the prior red session's body — a session-level bullish engulfing candle — how often the NEXT session closed green. The denominator is engulfing sessions with a next session on record; the numerator is the ones followed by a green close. Session-level engulfings are much rarer than intraday ones: expect small N, and let the guards, not the point estimate, set the tone when the sample is thin.",
+  "outcome": "nextCloseGreen",
+  "where": "bullEngulfing",
+  "deltas": [
+    "an explicit engulfing definition (body engulfs prior red body) instead of chart-by-chart judgment",
+    "minimum-N guards and CIs keep rare-pattern statistics honest",
+    "next-session return distribution attached alongside the rate"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "engulfing-bar"
+    },
+    {
+      "kind": "concept",
+      "slug": "candlestick-patterns"
+    }
+  ]
+}

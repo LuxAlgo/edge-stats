@@ -1,0 +1,26 @@
+{
+  "name": "@luxalgo/edge-stats-mcp",
+  "version": "0.1.0",
+  "description": "edge-stats-mcp — local MCP server over your Edge Stats store: arbitrary conditional-probability queries, the preset catalog, drill-downs, and exports for any agent. stdio + streamable HTTP.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "edge-stats-mcp": "./src/index.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/server.ts",
+      "default": "./src/server.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LuxAlgo/edge-stats",
+    "directory": "packages/mcp"
+  },
+  "dependencies": {
+    "@luxalgo/edge-stats": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  }
+}

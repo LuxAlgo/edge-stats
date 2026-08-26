@@ -1,0 +1,15 @@
+Data license
+
+The data files in this repository under data/ (exchange holiday and
+half-day calendars, macro event date calendars) are compilations of
+publicly published factual dates, with sources cited inside each file.
+
+To the extent LuxAlgo Global, LLC holds rights in these compilations, they
+are licensed under the Creative Commons Attribution 4.0 International
+license (CC BY 4.0): https://creativecommons.org/licenses/by/4.0/
+
+Attribution: "Calendar data from Edge Stats by LuxAlgo
+(github.com/LuxAlgo/edge-stats)".
+
+Everything else in this repository is code and documentation, licensed
+under the MIT license in the LICENSE file.

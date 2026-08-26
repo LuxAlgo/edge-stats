@@ -1,0 +1,24 @@
+{
+  "id": "engulfing-bear",
+  "version": 1,
+  "title": "Bearish Engulfing Follow-Through",
+  "category": "session-shape",
+  "summary": "Of the sessions whose red body engulfed the prior green session's body — a session-level bearish engulfing candle — how often the NEXT session closed green. The denominator is engulfing sessions with a next session on record; the numerator is the ones followed by a green close, so a LOW estimate is what the pattern's usual story predicts. Rare patterns mean small N: the guards and intervals are part of the answer, not decoration.",
+  "outcome": "nextCloseGreen",
+  "where": "bearEngulfing",
+  "deltas": [
+    "the exact mirror of engulfing-bull, on one definition, so the asymmetry is measurable",
+    "minimum-N guards and CIs keep rare-pattern statistics honest",
+    "compose with trend or streak conditions to test the context the textbooks assume"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "engulfing-bar"
+    },
+    {
+      "kind": "concept",
+      "slug": "candlestick-patterns"
+    }
+  ]
+}

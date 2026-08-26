@@ -1,0 +1,28 @@
+{
+  "id": "high-time",
+  "version": 1,
+  "title": "Time of Session High",
+  "category": "time-of-day",
+  "summary": "How often the session's high printed within the first m minutes (default: the first hour). The denominator is every session with a resolved high time; the numerator is the ones whose first print of the high came before the cutoff. The real payload is the attached minutes-to-high distribution over ALL eligible sessions — the threshold rate is one slice of it, and moving the cutoff re-slices without re-deriving anything.",
+  "outcome": "timeOfHighBefore({within})",
+  "params": [
+    {
+      "name": "within",
+      "type": "duration",
+      "default": 60,
+      "doc": "Cutoff from the session open, in minutes.",
+      "target": "outcome"
+    }
+  ],
+  "deltas": [
+    "the full time-of-high distribution, not a single early-or-late percentage",
+    "the cutoff is a parameter — first 15, 30, 60, 90 minutes are one preset",
+    "condition on gap or event days to see when the high clock shifts"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "session-high-low-statistics"
+    }
+  ]
+}

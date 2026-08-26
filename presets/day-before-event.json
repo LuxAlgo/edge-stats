@@ -1,0 +1,22 @@
+{
+  "id": "day-before-event",
+  "version": 1,
+  "title": "Day Before an Event",
+  "category": "events",
+  "summary": "Of the sessions whose NEXT trading session is an event day in the named calendar, how often the session closed above its open. 'Next' is trading-calendar aware — a Thursday counts as the day before a Monday event when Friday is a holiday — not naive date arithmetic. The default calendar is OPEX because it ships with the engine; point the parameter at FOMC, CPI, NFP, or any calendar file you add, and the preset reports zero matching sessions until that file is present.",
+  "outcome": "closeGreen",
+  "params": [
+    {
+      "name": "event",
+      "type": "string",
+      "default": "OPEX",
+      "doc": "Event calendar name as listed in the events data (e.g. OPEX, FOMC, CPI, NFP).",
+      "fragment": "dayBeforeEvent({value})"
+    }
+  ],
+  "deltas": [
+    "one parameterized preset covers the entire pre-event family",
+    "holiday-aware adjacency instead of calendar-day arithmetic",
+    "user-supplied event files (earnings, expiries, journal tags) work identically"
+  ]
+}

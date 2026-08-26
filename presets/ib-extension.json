@@ -1,0 +1,40 @@
+{
+  "id": "ib-extension",
+  "version": 1,
+  "title": "Initial Balance Extension",
+  "category": "initial-balance",
+  "summary": "Of the sessions that broke their initial balance in the given direction, how often price extended at least r times the IB range beyond the broken side. Sessions that held inside their balance never enter the denominator — this measures what breaks became, not how often breaks happen. Ladder r for the extension curve, and read it next to the break-type table for the other half of the question.",
+  "outcome": "ibExtension({r}, {dir})",
+  "params": [
+    {
+      "name": "r",
+      "type": "number",
+      "default": 1,
+      "doc": "Extension target in IB-range multiples.",
+      "target": "outcome"
+    },
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down", "any"],
+      "default": "any",
+      "doc": "Break side to condition on.",
+      "target": "outcome"
+    }
+  ],
+  "deltas": [
+    "a continuous extension ladder instead of fixed target lines",
+    "the conditional denominator (breaking sessions) is stated, not implied",
+    "N + 95% CI + stability split on every rung"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "initial-balance"
+    },
+    {
+      "kind": "indicator",
+      "slug": "initial-balance-breakout-signals"
+    }
+  ]
+}

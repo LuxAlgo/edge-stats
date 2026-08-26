@@ -1,0 +1,22 @@
+{
+  "id": "day-after-event",
+  "version": 1,
+  "title": "Day After an Event",
+  "category": "events",
+  "summary": "Of the sessions whose PREVIOUS trading session was an event day in the named calendar, how often the session closed above its open. Adjacency is trading-calendar aware, so weekends and holidays never miscount which session came after the event. The default calendar is OPEX because it ships with the engine; any other named calendar reports zero matching sessions until its date file is present.",
+  "outcome": "closeGreen",
+  "params": [
+    {
+      "name": "event",
+      "type": "string",
+      "default": "OPEX",
+      "doc": "Event calendar name as listed in the events data (e.g. OPEX, FOMC, CPI, NFP).",
+      "fragment": "dayAfterEvent({value})"
+    }
+  ],
+  "deltas": [
+    "one parameterized preset covers the entire post-event family",
+    "holiday-aware adjacency instead of calendar-day arithmetic",
+    "open-to-close return distribution attached for the size of the after-move"
+  ]
+}

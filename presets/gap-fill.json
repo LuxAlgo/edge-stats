@@ -1,0 +1,39 @@
+{
+  "id": "gap-fill",
+  "version": 1,
+  "title": "Gap Fill",
+  "category": "gaps",
+  "summary": "Of the sessions that opened away from the prior session's close, how often price traded back to that close. The denominator is every session with a gap (roll days excluded by construction); the fill is the conventional touch of the prior close. Slice it by size, direction, weekday, or any registry condition — and read the time-to-fill distribution, not just the rate.",
+  "outcome": "gapFill",
+  "params": [
+    {
+      "name": "minGapPct",
+      "type": "number",
+      "doc": "Only gaps at least this large (percent of prior close, absolute).",
+      "fragment": "absGapPct >= {value}"
+    },
+    {
+      "name": "maxGapPct",
+      "type": "number",
+      "doc": "Only gaps at most this large (percent of prior close, absolute).",
+      "fragment": "absGapPct <= {value}"
+    },
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down"],
+      "doc": "Only gaps in this direction.",
+      "fragment": "gapDir = {value}"
+    }
+  ],
+  "deltas": [
+    "any composed condition (FVG state, event days, prior-day direction, volatility regime) — not a fixed dropdown set",
+    "time-to-fill distribution alongside the fill rate",
+    "N + 95% CI + stability split on every number",
+    "unlimited history — your data decides the depth"
+  ],
+  "library": [
+    { "kind": "concept", "slug": "gap-fill" },
+    { "kind": "indicator", "slug": "session-gap-fill" }
+  ]
+}

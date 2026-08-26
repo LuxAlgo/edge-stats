@@ -1,0 +1,44 @@
+{
+  "id": "gap-fill-by-weekday",
+  "version": 1,
+  "title": "Gap Fill by Weekday",
+  "category": "gaps",
+  "summary": "The gap-fill rate split by weekday. Each row's denominator is the gapped sessions (roll days excluded by construction) whose trade date fell on that weekday; the numerator is the ones that traded back to the prior session's close. Weekday buckets divide an already-conditional sample, so read every row's N and interval against the all-days rate before believing a day is special.",
+  "outcome": "gapFill",
+  "params": [
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down"],
+      "doc": "Only gaps in this direction.",
+      "fragment": "gapDir = {value}"
+    },
+    {
+      "name": "minGapPct",
+      "type": "number",
+      "doc": "Only gaps at least this large (percent of prior close, absolute).",
+      "fragment": "absGapPct >= {value}"
+    }
+  ],
+  "groupBy": "dayOfWeek",
+  "deltas": [
+    "one grouped result instead of five separate weekday reports",
+    "per-weekday N and 95% CI expose which day-of-week differences are noise",
+    "direction and size filters stack on top of the weekday split",
+    "unlimited history — your data decides the depth"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "gap-fill"
+    },
+    {
+      "kind": "indicator",
+      "slug": "session-gap-fill"
+    },
+    {
+      "kind": "indicator",
+      "slug": "seasonality-widget"
+    }
+  ]
+}

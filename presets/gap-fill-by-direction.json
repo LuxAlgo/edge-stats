@@ -1,0 +1,32 @@
+{
+  "id": "gap-fill-by-direction",
+  "version": 1,
+  "title": "Gap Fill by Direction",
+  "category": "gaps",
+  "summary": "The gap-fill rate with up-gaps and down-gaps side by side. Each row's denominator is the sessions that gapped that way (roll days excluded by construction); the numerator is the ones that traded back to the prior session's close during the session. Up/down asymmetry is the whole question here, so compare the two rows' confidence intervals rather than their point estimates alone.",
+  "outcome": "gapFill",
+  "params": [
+    {
+      "name": "minGapPct",
+      "type": "number",
+      "doc": "Only gaps at least this large (percent of prior close, absolute).",
+      "fragment": "absGapPct >= {value}"
+    }
+  ],
+  "groupBy": "gapDir",
+  "deltas": [
+    "both directions in one result, each with its own N and 95% CI",
+    "a size floor keeps micro-gaps from diluting the comparison",
+    "any further condition — weekday, events, volatility regime — applies to both rows at once"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "gap-fill"
+    },
+    {
+      "kind": "indicator",
+      "slug": "session-gap-fill"
+    }
+  ]
+}

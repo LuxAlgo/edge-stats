@@ -1,0 +1,19 @@
+{
+  "id": "green-rate",
+  "version": 1,
+  "title": "Baseline Green Rate",
+  "category": "seasonality",
+  "summary": "The unconditional share of sessions that closed above their open — the baseline every conditional preset in this catalog should be compared against. The denominator is every complete session for the symbol; the numerator is the green ones. A conditional rate only means something relative to this number and its interval: 60% green after some pattern is not a finding if the market printed 58% green everywhere. The attached open-to-close return distribution is the size counterpart of the same baseline.",
+  "outcome": "closeGreen",
+  "deltas": [
+    "the anchor number for every other preset, computed on identical data with identical guards",
+    "per-year counts show drift in the baseline itself",
+    "open-to-close return distribution attached"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "session-open-close-behaviors"
+    }
+  ]
+}

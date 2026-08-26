@@ -1,0 +1,977 @@
+{
+  "exchange": "CME",
+  "version": "2026-08.1",
+  "sources": ["https://www.cmegroup.com/tools-information/holiday-calendar.html"],
+  "notes": "CME equity-index profile: full closes on New Year’s Day, Good Friday, and Christmas; other US holidays modeled as 13:00 ET early halts (exact halt minutes vary by product and year — verify against the CME holiday calendar before extending coverage). Product groups with materially different schedules (energy, ags) need their own calendar file.",
+  "coverage": {
+    "from": "2010-01-01",
+    "to": "2027-12-31"
+  },
+  "holidays": [
+    {
+      "date": "2010-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2010-04-02",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2010-12-24",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2011-04-22",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2011-12-26",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2012-01-02",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2012-04-06",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2012-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2013-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2013-03-29",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2013-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2014-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2014-04-18",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2014-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2015-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2015-04-03",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2015-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2016-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2016-03-25",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2016-12-26",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2017-01-02",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2017-04-14",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2017-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2018-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2018-03-30",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2018-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2019-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2019-04-19",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2019-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2020-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2020-04-10",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2020-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2021-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2021-04-02",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2021-12-24",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2022-04-15",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2022-12-26",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2023-01-02",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2023-04-07",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2023-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2024-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2024-03-29",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2024-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2025-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2025-04-18",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2025-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2026-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2026-04-03",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2026-12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "date": "2027-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2027-03-26",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2027-12-24",
+      "name": "Christmas Day"
+    }
+  ],
+  "halfDays": [
+    {
+      "date": "2010-01-18",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2010-02-15",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2010-05-31",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2010-07-05",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2010-09-06",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2010-11-25",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2010-11-26",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-01-17",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-02-21",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-05-30",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-09-05",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-11-24",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2011-11-25",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-01-16",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-02-20",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-05-28",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-09-03",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-11-22",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-11-23",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2012-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-01-21",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-02-18",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-05-27",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-09-02",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-11-28",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-11-29",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2013-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-01-20",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-02-17",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-05-26",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-09-01",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-11-27",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-11-28",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2014-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-01-19",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-02-16",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-05-25",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-07-03",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-09-07",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-11-26",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-11-27",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2015-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-01-18",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-02-15",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-05-30",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-09-05",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-11-24",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2016-11-25",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-01-16",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-02-20",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-05-29",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-09-04",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-11-23",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2017-11-24",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-01-15",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-02-19",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-05-28",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-09-03",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-11-22",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-11-23",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2018-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-01-21",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-02-18",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-05-27",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-09-02",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-11-28",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-11-29",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2019-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-01-20",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-02-17",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-05-25",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-07-03",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-09-07",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-11-26",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-11-27",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2020-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-01-18",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-02-15",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-05-31",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-07-05",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-09-06",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-11-25",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2021-11-26",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-01-17",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-02-21",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-05-30",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-06-20",
+      "name": "Juneteenth (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-09-05",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-11-24",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2022-11-25",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-01-16",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-02-20",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-05-29",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-06-19",
+      "name": "Juneteenth (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-09-04",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-11-23",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2023-11-24",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-01-15",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-02-19",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-05-27",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-06-19",
+      "name": "Juneteenth (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-09-02",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-11-28",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-11-29",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2024-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-01-20",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-02-17",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-05-26",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-06-19",
+      "name": "Juneteenth (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-07-03",
+      "name": "Day before Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-07-04",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-09-01",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-11-27",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-11-28",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2025-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-01-19",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-02-16",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-05-25",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-06-19",
+      "name": "Juneteenth (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-07-03",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-09-07",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-11-26",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-11-27",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2026-12-24",
+      "name": "Christmas Eve (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-01-18",
+      "name": "Martin Luther King, Jr. Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-02-15",
+      "name": "Washington's Birthday (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-05-31",
+      "name": "Memorial Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-06-18",
+      "name": "Juneteenth (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-07-05",
+      "name": "Independence Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-09-06",
+      "name": "Labor Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-11-25",
+      "name": "Thanksgiving Day (early halt)",
+      "close": "13:00"
+    },
+    {
+      "date": "2027-11-26",
+      "name": "Day after Thanksgiving (early halt)",
+      "close": "13:00"
+    }
+  ]
+}

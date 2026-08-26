@@ -1,0 +1,34 @@
+{
+  "id": "prev-low-touch",
+  "version": 1,
+  "title": "Prior Low Touch by Open Location",
+  "category": "levels",
+  "summary": "How often the session reached the prior session's low, given where it opened inside the prior range — by default, opens in the lower half (open position at most 0.5, where 0 is the prior low and 1 the prior high). The denominator is sessions with a prior range that opened inside the chosen band; the numerator is the ones that traded at or below the prior low. As with the prior-high twin, opens nearer the level are mechanically closer to touching it — separate that geometry from behavior before drawing conclusions.",
+  "outcome": "touchPrevLow",
+  "params": [
+    {
+      "name": "maxOpenPos",
+      "type": "number",
+      "default": 0.5,
+      "doc": "Only sessions that opened at most this far up the prior range (0 = prior low, 1 = prior high).",
+      "fragment": "openPosInPrevRange <= {value}"
+    },
+    {
+      "name": "minOpenPos",
+      "type": "number",
+      "doc": "Only sessions that opened at least this far up the prior range.",
+      "fragment": "openPosInPrevRange >= {value}"
+    }
+  ],
+  "deltas": [
+    "continuous open-location bands instead of a halves toggle",
+    "minutes-to-touch distribution attached to every run",
+    "N + 95% CI + stability split on every number"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "session-levels-predictor"
+    }
+  ]
+}

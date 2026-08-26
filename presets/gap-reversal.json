@@ -1,0 +1,38 @@
+{
+  "id": "gap-reversal",
+  "version": 1,
+  "title": "Gap Fill and Reverse",
+  "category": "gaps",
+  "summary": "Of the sessions that filled their opening gap, how often the session went on to close beyond the prior close against the gap's direction — fill-and-reverse rather than fill-and-hold. The denominator is filled gaps only, so this is a second-stage question: it says nothing about whether gaps fill, only about what filling led to. Multiply by the fill rate if you want the share of all gapped sessions instead.",
+  "outcome": "gapReversal",
+  "params": [
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down"],
+      "doc": "Only gaps in this direction.",
+      "fragment": "gapDir = {value}"
+    },
+    {
+      "name": "minGapPct",
+      "type": "number",
+      "doc": "Only gaps at least this large (percent of prior close, absolute).",
+      "fragment": "absGapPct >= {value}"
+    }
+  ],
+  "deltas": [
+    "an explicitly conditional denominator (filled gaps), stated rather than implied",
+    "direction and size parameters reshape the question without a new report",
+    "N + 95% CI + per-year counts on every number"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "gap-fill"
+    },
+    {
+      "kind": "indicator",
+      "slug": "session-gap-fill"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "id": "low-time",
+  "version": 1,
+  "title": "Time of Session Low",
+  "category": "time-of-day",
+  "summary": "How often the session's low printed within the first m minutes (default: the first hour). The denominator is every session with a resolved low time; the numerator is the ones whose first print of the low came before the cutoff. Read it with high-time: together the two distributions describe how often each extreme forms early, which is the honest core of every 'the low is in by 10:30' claim.",
+  "outcome": "timeOfLowBefore({within})",
+  "params": [
+    {
+      "name": "within",
+      "type": "duration",
+      "default": 60,
+      "doc": "Cutoff from the session open, in minutes.",
+      "target": "outcome"
+    }
+  ],
+  "deltas": [
+    "the full time-of-low distribution alongside the threshold rate",
+    "a movable cutoff replaces a fixed early/late split",
+    "N + 95% CI + stability split on every number"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "session-high-low-statistics"
+    }
+  ]
+}

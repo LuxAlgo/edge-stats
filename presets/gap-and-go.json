@@ -1,0 +1,35 @@
+{
+  "id": "gap-and-go",
+  "version": 2,
+  "title": "Gap and Go",
+  "category": "gaps",
+  "summary": "Of the sessions that gapped in the chosen direction, how often the gap NEVER filled AND the session closed beyond its own open in the gap's direction — the continuation measured directly, not inferred as the complement of the fill rate. A session that merely avoided the fill but faded back through its open does not count as a go; this is the stricter, honest definition. Roll days are excluded by construction.",
+  "outcome": "gapHold({dir})",
+  "params": [
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down", "any"],
+      "default": "any",
+      "doc": "Gap direction to condition on.",
+      "target": "outcome"
+    },
+    {
+      "name": "minGapPct",
+      "type": "number",
+      "doc": "Only gaps at least this large (percent of prior close, absolute).",
+      "fragment": "absGapPct >= {value}"
+    }
+  ],
+  "groupBy": "gapBucket",
+  "deltas": [
+    "a real outcome, not the mirrored fill rate: no-fill AND directional close are both required, so a stalled gap can't masquerade as a go",
+    "grouped by gap size out of the box — the go rate is famously size-dependent, and the per-bucket N shows exactly where the sample thins out",
+    "a size floor turns 'gap and go' into a testable definition instead of a slogan",
+    "N + 95% CI + stability split on every number"
+  ],
+  "library": [
+    { "kind": "concept", "slug": "gap-and-go" },
+    { "kind": "concept", "slug": "gap-fill" }
+  ]
+}

@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/*
+  Edge Stats dashboard theme — original design language, dark-first.
+  Tokens only here; components consume them. (The look is ours: no
+  borrowing of anyone's product visuals.)
+*/
+:root {
+  --bg: #0a0d13;
+  --panel: #10141d;
+  --panel-2: #161b27;
+  --border: #232a3a;
+  --text: #e8ebf2;
+  --text-dim: #8b93a7;
+  --accent: #4f7cff;
+  --accent-2: #8b5cf6;
+  --green: #22c07a;
+  --red: #e5484d;
+  --warn: #f5a623;
+
+  /* Chart track behind bars and whiskers. */
+  --track: #1a2030;
+
+  color-scheme: dark;
+}
+
+/* Map the tokens into Tailwind v4 utilities: bg-panel, text-dim, border-line, … */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--border);
+  --color-ink: var(--text);
+  --color-dim: var(--text-dim);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-pos: var(--green);
+  --color-neg: var(--red);
+  --color-warn: var(--warn);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Every statistic lines up: tabular digits wherever numbers render. */
+.stat {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Loading skeletons. */
+@keyframes es-shimmer {
+  0% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.45;
+  }
+}
+.skeleton {
+  background: var(--panel-2);
+  border-radius: 6px;
+  animation: es-shimmer 1.4s ease-in-out infinite;
+}
+
+/* Focus visibly, in the accent — keyboard users are first-class. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+/* Quiet scrollbars that match the panels. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* Native date fields: dark, compact, calendar icon dimmed to match. */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.65);
+  opacity: 0.7;
+  cursor: pointer;
+}

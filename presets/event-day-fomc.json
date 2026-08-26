@@ -1,0 +1,14 @@
+{
+  "id": "event-day-fomc",
+  "version": 1,
+  "title": "FOMC Day Green Rate",
+  "category": "events",
+  "summary": "Of the sessions whose trade date is in the FOMC calendar, how often the session closed above its open. The denominator is FOMC dates that exist in both your bars and the events data; the numerator is the green ones. Event dates are versioned data files: the FOMC file is compiled from the Federal Reserve's published meeting calendar and ships separately, so until it is present this preset reports zero matching sessions rather than a guess.",
+  "outcome": "closeGreen",
+  "where": "eventDay('FOMC')",
+  "deltas": [
+    "the same flag works in reverse — NOT eventDay('FOMC') cleans any other preset of FOMC noise",
+    "trading-calendar-aware day-before and day-after siblings",
+    "per-year counts show whether the event's behavior drifted"
+  ]
+}

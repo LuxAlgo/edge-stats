@@ -1,0 +1,28 @@
+{
+  "id": "prev-range",
+  "version": 1,
+  "title": "Prior Session Levels",
+  "category": "levels",
+  "summary": "How often the session trades back to the prior session's high (or low), conditioned on where it opened inside the prior range. The open-position filter is the classic continuation/mean-reversion cut; every other registry predicate composes on top.",
+  "outcome": "touchPrevHigh",
+  "params": [
+    {
+      "name": "minOpenPos",
+      "type": "number",
+      "doc": "Only sessions that opened at least this far up the prior range (0 = prior low, 1 = prior high).",
+      "fragment": "openPosInPrevRange >= {value}"
+    },
+    {
+      "name": "maxOpenPos",
+      "type": "number",
+      "doc": "Only sessions that opened at most this far up the prior range.",
+      "fragment": "openPosInPrevRange <= {value}"
+    }
+  ],
+  "deltas": [
+    "generalizes beyond fixed 'open in upper/lower half' cuts — the open position is a continuous filter",
+    "minutes-to-touch distribution included",
+    "swap the outcome for touchPrevLow / breakHoldPrevHigh to get the full family from the same registry"
+  ],
+  "library": [{ "kind": "indicator", "slug": "session-levels-predictor" }]
+}

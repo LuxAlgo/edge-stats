@@ -1,0 +1,29 @@
+{
+  "name": "@luxalgo/edge-stats-cli",
+  "version": "0.1.0",
+  "description": "edgestats — the Edge Stats CLI: init, sync, query, report, export, calendar, serve, bench.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "edgestats": "./src/index.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LuxAlgo/edge-stats",
+    "directory": "packages/cli"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "@luxalgo/edge-stats": "workspace:*",
+    "commander": "^15.0.0",
+    "hono": "^4.13.4",
+    "picocolors": "^1.1.1",
+    "zod": "^4.4.3"
+  }
+}

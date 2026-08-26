@@ -1,0 +1,14 @@
+{
+  "id": "event-day-cpi",
+  "version": 1,
+  "title": "CPI Day Green Rate",
+  "category": "events",
+  "summary": "Of the sessions whose trade date is in the CPI calendar, how often the session closed above its open. The denominator is CPI release dates present in both your bars and the events data; the numerator is the green ones. The CPI date file is compiled from the BLS release schedule and ships separately — until it is present this preset reports zero matching sessions rather than inventing dates.",
+  "outcome": "closeGreen",
+  "where": "eventDay('CPI')",
+  "deltas": [
+    "event days as a first-class filter, usable on every preset in the catalog",
+    "exclusion form (NOT eventDay) is the same one keystroke away",
+    "N + 95% CI on a sample that is small by nature — stated, not hidden"
+  ]
+}

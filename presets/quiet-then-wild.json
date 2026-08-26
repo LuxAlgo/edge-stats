@@ -1,0 +1,23 @@
+{
+  "id": "quiet-then-wild",
+  "version": 1,
+  "title": "Narrow Flag, Wide Session",
+  "category": "volatility",
+  "summary": "Among NR4 sessions — the narrowest range of the trailing four, a flag the session earns itself — how often that same session's range nevertheless reached r times the prior 14-session ATR. The two yardsticks disagree by design: NR4 is relative to the last four sessions, ATR to the last fourteen, so a session can be locally narrowest yet still large in absolute terms after a wild stretch. The denominator is NR4 sessions with an ATR on record; the numerator is the ones clearing the threshold — and this is a same-session measurement, not a day-after expansion stat, which would need a next-session range outcome.",
+  "outcome": "hit(rangeVsAtr, gte, {r})",
+  "where": "nr4",
+  "params": [
+    {
+      "name": "r",
+      "type": "number",
+      "default": 1,
+      "doc": "Range threshold in multiples of the prior 14-session ATR.",
+      "target": "outcome"
+    }
+  ],
+  "deltas": [
+    "makes the relative-vs-absolute volatility disagreement measurable instead of anecdotal",
+    "the range-vs-ATR distribution of flagged sessions is attached in full",
+    "N + 95% CI + guards on a condition that thins the sample fast"
+  ]
+}

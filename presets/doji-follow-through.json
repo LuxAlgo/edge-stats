@@ -1,0 +1,20 @@
+{
+  "id": "doji-follow-through",
+  "version": 1,
+  "title": "Doji Follow-Through",
+  "category": "session-shape",
+  "summary": "Of the sessions that closed as a session-level doji — close within 10% of the session range from the open — how often the NEXT session closed green. The denominator is doji sessions with a next session on record; the numerator is the ones followed by a green close. A doji is an indecision flag, so the informative comparison is against the unconditional next-session green rate: a doji that changes nothing is itself a finding.",
+  "outcome": "nextCloseGreen",
+  "where": "doji",
+  "deltas": [
+    "a stated, reproducible doji definition instead of an eyeballed one",
+    "next-session return distribution attached alongside the rate",
+    "compose with gap state or weekday to test the pattern in context"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "candlestick-patterns"
+    }
+  ]
+}

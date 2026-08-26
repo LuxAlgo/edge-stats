@@ -1,0 +1,20 @@
+{
+  "id": "outside-day",
+  "version": 1,
+  "title": "Outside Day Follow-Through",
+  "category": "session-shape",
+  "summary": "Of the sessions that traded beyond BOTH the prior session's high and low, how often the NEXT session closed green. The denominator is outside sessions with a next session on record; the numerator is the ones whose next session closed above its own open. Outside sessions are rare by construction, so expect a small N and let the guard banners carry the appropriate weight.",
+  "outcome": "nextCloseGreen",
+  "where": "outsideDay",
+  "deltas": [
+    "the exact complement design of inside-day, so the two read on one scale",
+    "next-session return distribution attached alongside the rate",
+    "minimum-N guards refuse to dress up a thin sample"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "candlestick-patterns"
+    }
+  ]
+}

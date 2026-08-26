@@ -1,0 +1,27 @@
+{
+  "name": "@luxalgo/edge-stats",
+  "version": "0.1.0",
+  "description": "Open-source trading-statistics engine: composable conditional-probability queries — P(outcome | conditions) — over your own bars, with sample sizes and confidence intervals on every result.",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LuxAlgo/edge-stats",
+    "directory": "packages/core"
+  },
+  "dependencies": {
+    "@duckdb/node-api": "^1.5.5-r.4",
+    "fflate": "^0.8.3",
+    "luxon": "^3.7.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.7.5"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "initial-balance",
+  "version": 1,
+  "title": "Initial Balance Break Types",
+  "category": "initial-balance",
+  "summary": "The green-close rate for each way a session resolved its initial balance \u2014 held inside (none), broke one side (single_up, single_down), or broke both (double). Each row's denominator is the sessions of that break type and its numerator the ones that closed above their open, while the row's N doubles as the break-type distribution across all sessions \u2014 one table, two readings. Group by anything else, or drop the grouping, to reuse the same question.",
+  "outcome": "closeGreen",
+  "groupBy": "ibBreakType",
+  "deltas": [
+    "the N column doubles as the break-type frequency table \u2014 two classic reports in one result",
+    "per-type 95% CI instead of one blended number",
+    "condition the whole table on anything: gap state, weekday, event days"
+  ],
+  "library": [
+    {
+      "kind": "concept",
+      "slug": "initial-balance"
+    },
+    {
+      "kind": "indicator",
+      "slug": "initial-balance-breakout-signals"
+    }
+  ]
+}

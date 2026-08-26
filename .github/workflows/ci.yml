@@ -1,0 +1,69 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Calendar/event coverage horizons — lenient 30-day window PR-side so a
+      # merely-old checkout can't fail spuriously, and event horizons warn
+      # rather than fail (a PR author can't extend a data horizon that needs
+      # institutional verification; stale HOLIDAY calendars still fail hard
+      # since they break session resolution itself). The scheduled
+      # calendar-freshness workflow enforces the strict default daily.
+      - run: node scripts/check-freshness.mjs --min-days 30 --events-warn-only
+      - run: node scripts/check-licenses.mjs
+      - run: pnpm format:check
+      - run: pnpm lint --max-warnings 0
+      - run: pnpm typecheck
+      - run: pnpm --filter @luxalgo/edge-stats-web typecheck
+      - run: pnpm test:run
+      - run: pnpm --filter @luxalgo/edge-stats-web build
+
+  # The definition-of-done smoke: a clean machine, zero keys, one command,
+  # then a real composed query with N + CI — and the interactivity gate.
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm edgestats --dir .ci-demo init --demo --quiet
+      - run: pnpm edgestats --dir .ci-demo query "gapFill WHERE dayOfWeek = Tue AND gapPct BETWEEN 0.05% AND 0.6%" --symbol DEMO_STK
+      - run: pnpm edgestats --dir .ci-demo report gap-fill --symbol DEMO_FUT --group gapBucket
+      - run: pnpm edgestats --dir .ci-demo bench --max-ms 3000
+      - run: pnpm edgestats --dir .ci-demo export --query "gapFill" --symbol DEMO_STK --out .ci-demo/fills.csv
+
+  # Generated data files must match their generators (calendars are data,
+  # reviewed like data — and never silently drifting).
+  generated-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/gen-holidays.mjs && node scripts/gen-events.mjs && node fixtures/golden-sessions/gen-fixture.mjs
+      - run: pnpm exec prettier --write data
+      # docs/catalog.md is generated from presets/ + the registry; regenerate
+      # before the diff so it can never silently drift from its generators.
+      - run: pnpm exec tsx scripts/generate-catalog.ts
+      - run: git diff --exit-code -- data fixtures docs/catalog.md

@@ -1,0 +1,36 @@
+{
+  "name": "edge-stats-monorepo",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.0.8",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "edgestats": "tsx packages/cli/src/index.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit -p packages/core && tsc --noEmit -p packages/cli && tsc --noEmit -p packages/mcp",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "bench": "tsx packages/cli/src/index.ts bench",
+    "gen:holidays": "node scripts/gen-holidays.mjs && prettier --write data/holidays",
+    "gen:events": "node scripts/gen-events.mjs && prettier --write data/events",
+    "gen:catalog": "tsx scripts/generate-catalog.ts",
+    "check:freshness": "node scripts/check-freshness.mjs",
+    "check:library-parity": "node scripts/check-library-parity.mjs",
+    "check:licenses": "node scripts/check-licenses.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.19.0",
+    "eslint": "^10.9.1",
+    "prettier": "^3.9.6",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.68.0",
+    "vitest": "^4.1.11"
+  },
+  "license": "MIT"
+}

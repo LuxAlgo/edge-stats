@@ -1,0 +1,41 @@
+{
+  "id": "fvg-magnet",
+  "version": 1,
+  "title": "Gap Fill Toward an FVG",
+  "category": "fvg",
+  "summary": "The gap-fill rate when an unfilled session-level fair value gap sat on a chosen side of the open at session start. With the defaults — gapped up, FVG below — the prior close and the zone lie on the same side of the open, so filling the gap is movement toward the zone: the magnet reading. The denominator is sessions that gapped the chosen way AND carried such a zone (zones form on prior sessions only, no lookahead); the numerator is the ones that traded back to the prior close. The zone's whole contribution is the difference against the plain same-direction gap-fill rate — flip the parameters to test the opposing case.",
+  "outcome": "gapFill",
+  "params": [
+    {
+      "name": "dir",
+      "type": "enum",
+      "values": ["up", "down"],
+      "default": "up",
+      "doc": "Gap direction to condition on.",
+      "fragment": "gapDir = {value}"
+    },
+    {
+      "name": "side",
+      "type": "enum",
+      "values": ["below", "above"],
+      "default": "below",
+      "doc": "Side of the open the unfilled FVG must sit on (below pairs with up-gaps, above with down-gaps, for the aligned magnet reading).",
+      "fragment": "fvgPresent(open, {value})"
+    }
+  ],
+  "deltas": [
+    "a compositional question — gap state x FVG state — that fixed single-topic reports cannot ask",
+    "aligned and opposing configurations are the same preset with flipped parameters",
+    "time-to-fill distribution shows whether the zone changed the clock, not just the rate"
+  ],
+  "library": [
+    {
+      "kind": "indicator",
+      "slug": "fvg-sessions"
+    },
+    {
+      "kind": "concept",
+      "slug": "gap-fill"
+    }
+  ]
+}

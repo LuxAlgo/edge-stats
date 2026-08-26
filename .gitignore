@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+coverage/
+
+# local stores created by `edgestats init` (DuckDB + parquet + config copies)
+.edge-stats/
+.ci-demo/
+*.duckdb
+*.duckdb.wal
+
+# environment / keys — BYO keys live in env, never in the repo
+.env
+.env.*
+
+# editors & OS
+.DS_Store
+*.log
+
+# pnpm is the package manager — stray npm/yarn lockfiles confuse installs
+package-lock.json
+yarn.lock
