@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Initial Balance Extension",
   "category": "initial-balance",
-  "summary": "Of the sessions that broke their initial balance in the given direction, how often price extended at least r times the IB range beyond the broken side. Sessions that held inside their balance never enter the denominator — this measures what breaks became, not how often breaks happen. Ladder r for the extension curve, and read it next to the break-type table for the other half of the question.",
+  "summary": "Of the sessions that broke their initial balance in the given direction, how often price extended at least r times the IB range beyond the broken side. Sessions that held inside their balance never enter the denominator: this measures what breaks became, not how often breaks happen. Ladder r for the extension curve, and read it next to the break-type table for the other half of the question.",
   "outcome": "ibExtension({r}, {dir})",
   "params": [
     {

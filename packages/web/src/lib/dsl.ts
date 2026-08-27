@@ -1,6 +1,6 @@
 /*
   The query builder's model and its DSL renderer. The builder composes the
-  same string DSL the CLI and MCP server accept — the server parses it back
+  same string DSL the CLI and MCP server accept; the server parses it back
   to the canonical AST, so what you see in the DSL box is exactly what runs.
 */
 import type { RegistryArg, RegistryEntryDescription } from "./api";

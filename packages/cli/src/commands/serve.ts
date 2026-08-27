@@ -5,9 +5,10 @@
   when present; the API is the same core surface the MCP server exposes.
 */
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, normalize } from "node:path";
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import type { Context } from "hono";
 import { cors } from "hono/cors";
 import {
   DslSyntaxError,
@@ -120,19 +121,25 @@ export function buildApp(ctx: CliContext): Hono {
   const webDist = join(packagedDataRoot(), "packages", "web", "dist");
   if (existsSync(join(webDist, "index.html"))) {
     const indexHtml = readFileSync(join(webDist, "index.html"), "utf8");
-    app.get("/assets/*", (c) => {
-      const path = join(webDist, c.req.path);
-      if (!existsSync(path)) return c.notFound();
+    const MIME: Record<string, string> = {
+      ".js": "text/javascript",
+      ".css": "text/css",
+      ".svg": "image/svg+xml",
+      ".woff2": "font/woff2",
+      ".txt": "text/plain; charset=utf-8",
+    };
+    const serveFromDist = (c: Context) => {
+      const path = normalize(join(webDist, c.req.path));
+      if (!path.startsWith(webDist) || !existsSync(path)) return c.notFound();
+      const ext = path.slice(path.lastIndexOf("."));
       const body = readFileSync(path);
-      const type = path.endsWith(".js")
-        ? "text/javascript"
-        : path.endsWith(".css")
-          ? "text/css"
-          : path.endsWith(".svg")
-            ? "image/svg+xml"
-            : "application/octet-stream";
-      return c.body(body, 200, { "content-type": type });
-    });
+      return c.body(body, 200, {
+        "content-type": MIME[ext] ?? "application/octet-stream",
+        "cache-control": "public, max-age=3600",
+      });
+    };
+    app.get("/assets/*", serveFromDist);
+    app.get("/fonts/*", serveFromDist);
     app.get("*", (c) => c.html(indexHtml));
   } else {
     app.get("/", (c) =>

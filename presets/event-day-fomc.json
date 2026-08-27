@@ -7,7 +7,7 @@
   "outcome": "closeGreen",
   "where": "eventDay('FOMC')",
   "deltas": [
-    "the same flag works in reverse — NOT eventDay('FOMC') cleans any other preset of FOMC noise",
+    "the same flag works in reverse. NOT eventDay('FOMC') cleans any other preset of FOMC noise",
     "trading-calendar-aware day-before and day-after siblings",
     "per-year counts show whether the event's behavior drifted"
   ]

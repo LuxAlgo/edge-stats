@@ -8,7 +8,7 @@ export function fmtPct(x: number, digits = 1): string {
   return `${(x * 100).toFixed(digits)}%`;
 }
 
-/** "81.6–87.9%" — one unit sign for the pair, en dash between. */
+/** "81.6–87.9%": one unit sign for the pair, en dash between. */
 export function fmtCiRange(ci: [number, number], digits = 1): string {
   return `${(ci[0] * 100).toFixed(digits)}–${(ci[1] * 100).toFixed(digits)}%`;
 }

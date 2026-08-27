@@ -6,6 +6,7 @@
   many variations have been tried (multiple comparisons).
 */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { X } from "lucide-react";
 import type { QueryRequest, QueryResult, RegistryArg, RegistryEntryDescription } from "../lib/api";
 import { api, ApiError } from "../lib/api";
 import type { BuilderState, CompareOp, ConditionRow } from "../lib/dsl";
@@ -26,6 +27,7 @@ import {
   EmptyState,
   ErrorNote,
   Labeled,
+  NativeSelect,
   Panel,
   SectionLabel,
   SelectInput,
@@ -57,10 +59,10 @@ function ArgInput({
     spec.default !== undefined ? String(spec.default) : spec.required ? "required" : "optional";
   if (spec.type === "enum") {
     return (
-      <select
+      <NativeSelect
         aria-label={spec.name}
         title={spec.doc}
-        className={`${inputClass} w-auto`}
+        className="w-auto"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
@@ -72,20 +74,20 @@ function ArgInput({
             {v}
           </option>
         ))}
-      </select>
+      </NativeSelect>
     );
   }
   return (
     <span className="inline-flex items-center gap-1" title={spec.doc}>
       <input
         aria-label={spec.name}
-        className={`${inputClass} stat w-24`}
+        className={`${inputClass} stat w-24 font-mono text-xs`}
         type={spec.type === "string" ? "text" : "number"}
         value={value}
         placeholder={`${spec.name}${spec.default !== undefined ? ` (${placeholder})` : ""}`}
         onChange={(e) => onChange(e.target.value)}
       />
-      {spec.type === "duration" ? <span className="text-xs text-dim">min</span> : null}
+      {spec.type === "duration" ? <span className="text-xs text-muted-foreground">min</span> : null}
     </span>
   );
 }
@@ -97,8 +99,10 @@ function NotToggle({ value, onChange }: { value: boolean; onChange: (v: boolean)
       aria-pressed={value}
       title="Negate this condition"
       onClick={() => onChange(!value)}
-      className={`h-8 rounded-lg border px-2 font-mono text-xs font-semibold transition ${
-        value ? "border-neg/50 bg-neg/10 text-neg" : "border-line text-dim hover:text-ink"
+      className={`h-8 rounded-full border px-2.5 font-mono text-[11px] font-medium transition duration-150 active:scale-[0.98] ${
+        value
+          ? "border-destructive/40 bg-destructive/10 text-destructive"
+          : "border-border text-faint hover:text-foreground"
       }`}
     >
       NOT
@@ -130,9 +134,9 @@ function ValueEditor({
 
   const ops = opsFor(entry);
   const opSelect = (
-    <select
+    <NativeSelect
       aria-label="comparator"
-      className={`${inputClass} w-auto font-mono`}
+      className="w-auto font-mono"
       value={row.op}
       onChange={(e) => onChange({ ...row, op: e.target.value as CompareOp })}
     >
@@ -141,7 +145,7 @@ function ValueEditor({
           {op === "between" ? "BETWEEN" : op === "in" ? "IN" : op}
         </option>
       ))}
-    </select>
+    </NativeSelect>
   );
 
   if (entry.valueType === "enum") {
@@ -166,10 +170,10 @@ function ValueEditor({
                     values: (entry.enumValues ?? []).filter((x) => next.has(x)),
                   });
                 }}
-                className={`rounded-md border px-2 py-1 text-xs transition ${
+                className={`rounded-full border px-2.5 py-1 text-xs transition duration-150 active:scale-[0.98] ${
                   on
-                    ? "border-accent/60 bg-accent/15 text-accent"
-                    : "border-line text-dim hover:text-ink"
+                    ? "border-chart-1/40 bg-chart-1/10 text-chart-1"
+                    : "border-border text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {v}
@@ -182,9 +186,9 @@ function ValueEditor({
     return (
       <span className="inline-flex items-center gap-1.5">
         {opSelect}
-        <select
+        <NativeSelect
           aria-label="value"
-          className={`${inputClass} w-auto`}
+          className="w-auto"
           value={row.value}
           onChange={(e) => onChange({ ...row, value: e.target.value })}
         >
@@ -194,7 +198,7 @@ function ValueEditor({
               {v}
             </option>
           ))}
-        </select>
+        </NativeSelect>
       </span>
     );
   }
@@ -205,7 +209,7 @@ function ValueEditor({
       {opSelect}
       <input
         aria-label="value"
-        className={`${inputClass} stat w-24`}
+        className={`${inputClass} stat w-24 font-mono text-xs`}
         type="number"
         step="any"
         value={row.value}
@@ -214,10 +218,10 @@ function ValueEditor({
       />
       {row.op === "between" ? (
         <>
-          <span className="text-xs text-dim">and</span>
+          <span className="text-xs text-muted-foreground">and</span>
           <input
             aria-label="upper value"
-            className={`${inputClass} stat w-24`}
+            className={`${inputClass} stat w-24 font-mono text-xs`}
             type="number"
             step="any"
             value={row.valueHi}
@@ -226,7 +230,7 @@ function ValueEditor({
           />
         </>
       ) : null}
-      {unit ? <span className="text-xs text-dim">{unit}</span> : null}
+      {unit ? <span className="text-xs text-muted-foreground">{unit}</span> : null}
     </span>
   );
 }
@@ -248,11 +252,11 @@ function RowEditor({
 }) {
   const entry = byName.get(row.name);
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-line bg-panel-2/50 p-2">
+    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-white/[0.06] bg-white/[0.02] p-2">
       <NotToggle value={row.not} onChange={(v) => onChange({ ...row, not: v })} />
-      <select
+      <NativeSelect
         aria-label="condition"
-        className={`${inputClass} w-auto max-w-[220px]`}
+        className="w-auto max-w-[220px]"
         value={row.name}
         onChange={(e) => {
           const name = e.target.value;
@@ -280,7 +284,7 @@ function RowEditor({
             </option>
           ))}
         </optgroup>
-      </select>
+      </NativeSelect>
 
       {entry && entry.kind === "predicate"
         ? (entry.args ?? []).map((spec) => (
@@ -298,7 +302,7 @@ function RowEditor({
 
       {entry ? (
         <span
-          className="hidden max-w-[260px] truncate text-[11px] text-dim xl:inline"
+          className="hidden max-w-[260px] truncate text-[11px] text-muted-foreground xl:inline"
           title={entry.doc}
         >
           {entry.doc}
@@ -308,9 +312,9 @@ function RowEditor({
         type="button"
         aria-label="remove condition"
         onClick={onRemove}
-        className="ml-auto rounded-md px-2 py-1 text-sm text-dim transition hover:text-neg"
+        className="ml-auto rounded-full p-1.5 text-faint transition-colors duration-150 hover:bg-white/[0.04] hover:text-destructive"
       >
-        ✕
+        <X className="size-3.5" aria-hidden="true" />
       </button>
     </div>
   );
@@ -318,10 +322,10 @@ function RowEditor({
 
 function MultipleComparisonsNote({ count, onDismiss }: { count: number; onDismiss: () => void }) {
   return (
-    <div className="flex items-start justify-between gap-3 rounded-lg border border-warn/40 bg-warn/10 p-3 text-sm">
+    <div className="flex items-start justify-between gap-3 rounded-lg border border-warning/25 bg-warning/10 p-3 text-sm">
       <div>
-        <span className="font-medium text-warn">{count} query variations this session.</span>{" "}
-        <span className="text-dim">
+        <span className="font-medium text-warning">{count} query variations this session.</span>{" "}
+        <span className="text-muted-foreground">
           Trying many cuts inflates the chance that one shows a spurious edge: that is how multiple
           comparisons work, not a property of your market. The honest moves: decide the cut before
           looking, and only trust numbers whose two halves agree in the stability split.
@@ -472,8 +476,8 @@ export function BuilderPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold tracking-tight">Query builder</h1>
-      <p className="mt-1 max-w-2xl text-sm leading-relaxed text-dim">
+      <h1 className="text-2xl font-medium tracking-tight">Query builder</h1>
+      <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
         Ask P(outcome | conditions) in any combination the registry knows. The DSL string below is
         live: copy it and the exact same query runs in the CLI and over MCP.
       </p>
@@ -499,9 +503,9 @@ export function BuilderPage() {
               <Skeleton className="mt-3 h-8 w-64" />
             ) : (
               <div className="mt-3 flex flex-wrap items-center gap-2">
-                <select
+                <NativeSelect
                   aria-label="outcome"
-                  className={`${inputClass} w-auto max-w-[240px]`}
+                  className="w-auto max-w-[240px]"
                   value={builder.outcome.name}
                   onChange={(e) =>
                     setBuilder((b) => ({ ...b, outcome: { name: e.target.value, args: {} } }))
@@ -512,7 +516,7 @@ export function BuilderPage() {
                       {o.name}
                     </option>
                   ))}
-                </select>
+                </NativeSelect>
                 {(outcomeEntry?.args ?? []).map((spec) => (
                   <ArgInput
                     key={spec.name}
@@ -529,10 +533,12 @@ export function BuilderPage() {
               </div>
             )}
             {outcomeEntry ? (
-              <p className="mt-2 text-xs leading-relaxed text-dim">{outcomeEntry.doc}</p>
+              <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                {outcomeEntry.doc}
+              </p>
             ) : null}
             {outcomeEntry?.valueDoc ? (
-              <p className="mt-1 text-xs text-dim">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Also measures: {outcomeEntry.valueDoc}
                 {outcomeEntry.valueUnit ? ` (${outcomeEntry.valueUnit})` : ""}
               </p>
@@ -542,7 +548,7 @@ export function BuilderPage() {
           <Panel className="p-4">
             <div className="flex items-center justify-between gap-2">
               <SectionLabel>Conditions: all must hold (AND)</SectionLabel>
-              <span className="text-[11px] text-dim">
+              <span className="text-[11px] text-muted-foreground">
                 {builder.rows.length === 0 && builder.groups.length === 0
                   ? "unconditioned"
                   : `${composed.incompleteRows > 0 ? `${composed.incompleteRows} incomplete · ` : ""}NULLs count as false`}
@@ -568,7 +574,7 @@ export function BuilderPage() {
                 />
               ))}
               {builder.rows.length === 0 ? (
-                <p className="text-xs text-dim">
+                <p className="text-xs text-muted-foreground">
                   No conditions yet: the outcome runs over every eligible session. Add a condition
                   to slice the denominator.
                 </p>
@@ -576,12 +582,12 @@ export function BuilderPage() {
             </div>
 
             {builder.groups.map((group, gi) => (
-              <div key={group.id} className="mt-3 rounded-lg border border-accent/30 p-3">
+              <div key={group.id} className="mt-3 rounded-lg border border-white/[0.08] p-3">
                 <div className="flex items-center justify-between gap-2">
                   <SectionLabel>OR group {gi + 1}: any may hold</SectionLabel>
                   <button
                     type="button"
-                    className="text-xs text-dim transition hover:text-neg"
+                    className="text-xs text-muted-foreground transition hover:text-destructive"
                     onClick={() =>
                       setBuilder((b) => ({
                         ...b,
@@ -731,7 +737,7 @@ export function BuilderPage() {
               <SectionLabel>Query DSL</SectionLabel>
               <button
                 type="button"
-                className="text-xs text-accent transition hover:brightness-110"
+                className="text-xs text-muted-foreground underline decoration-white/20 underline-offset-4 transition-colors duration-150 hover:text-foreground"
                 onClick={() => {
                   if (mode === "visual") focusDslBox();
                   else setMode("visual");
@@ -742,9 +748,9 @@ export function BuilderPage() {
             </div>
 
             {mode === "visual" ? (
-              <code className="stat mt-3 block min-h-[3.5rem] overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-line bg-panel-2 p-3 font-mono text-xs leading-relaxed">
+              <code className="stat mt-3 block min-h-[3.5rem] overflow-x-auto whitespace-pre-wrap break-words rounded-lg border border-white/[0.08] bg-black/60 p-3 font-mono text-xs leading-relaxed">
                 {composed.dsl ?? (
-                  <span className="text-dim">
+                  <span className="text-muted-foreground">
                     finish the outcome's required arguments to form a query…
                   </span>
                 )}
@@ -756,7 +762,7 @@ export function BuilderPage() {
                   aria-label="Query DSL"
                   rows={3}
                   spellCheck={false}
-                  className="stat mt-3 w-full resize-y rounded-lg border border-line bg-panel-2 p-3 font-mono text-xs leading-relaxed text-ink placeholder:text-dim/70 focus:border-accent"
+                  className="stat mt-3 w-full resize-y rounded-lg border border-border bg-white/[0.03] p-3 font-mono text-xs leading-relaxed text-foreground placeholder:text-faint transition-colors duration-150 hover:border-white/20 focus:border-white/30 focus:outline-none"
                   placeholder="gapFill WHERE dayOfWeek = Tue AND absGapPct >= 0.3"
                   value={text}
                   onChange={(e) => setText(e.target.value)}
@@ -767,7 +773,7 @@ export function BuilderPage() {
                     }
                   }}
                 />
-                <p className="mt-1 text-[11px] text-dim">
+                <p className="mt-1.5 text-[11px] text-faint">
                   text edits don't flow back into the composer: this box is the query now
                 </p>
               </>
@@ -788,7 +794,7 @@ export function BuilderPage() {
                 <CopyButton text={permalink} caption="permalink: reruns this exact query" />
               </div>
             ) : null}
-            <p className="stat mt-3 text-[11px] text-dim">
+            <p className="stat mt-3 font-mono text-[11px] text-faint">
               {variations} variation{variations === 1 ? "" : "s"} tried this session
             </p>
           </Panel>
@@ -800,17 +806,17 @@ export function BuilderPage() {
         {parseError !== null ? (
           <Panel className="p-4">
             <SectionLabel>The engine could not parse that</SectionLabel>
-            <pre className="stat mt-3 overflow-x-auto rounded-lg border border-neg/40 bg-panel-2 p-3 font-mono text-xs leading-relaxed">
+            <pre className="stat mt-3 overflow-x-auto rounded-lg border border-destructive/30 bg-black/60 p-3 font-mono text-xs leading-relaxed">
               {parseError.dsl}
               {"\n"}
-              <span className="text-neg">
+              <span className="text-destructive">
                 {" ".repeat(Math.max(0, parseError.err.position ?? 0)) +
                   "^".repeat(Math.max(1, parseError.err.length ?? 1))}
               </span>
             </pre>
-            <p className="mt-2 text-sm text-neg">{parseError.err.message}</p>
+            <p className="mt-2 text-sm text-destructive">{parseError.err.message}</p>
             {parseError.err.hint ? (
-              <p className="mt-1 text-sm text-dim">hint: {parseError.err.hint}</p>
+              <p className="mt-1 text-sm text-muted-foreground">hint: {parseError.err.hint}</p>
             ) : null}
           </Panel>
         ) : run.error ? (

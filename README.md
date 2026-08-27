@@ -169,4 +169,4 @@ pnpm edgestats --dir .ci-demo init --demo && pnpm edgestats --dir .ci-demo bench
 
 ## License
 
-Code is [MIT](LICENSE). The calendar and event data files under `data/` are additionally usable under [CC BY 4.0](DATA_LICENSE) with attribution to LuxAlgo. See [TRADEMARKS.md](TRADEMARKS.md) for name and logo use, and [SECURITY.md](SECURITY.md) for private vulnerability reporting.
+Code is [MIT](LICENSE). The calendar and event data files under `data/` are additionally usable under [CC BY 4.0](DATA_LICENSE) with attribution to LuxAlgo. The dashboard bundles the Geist fonts under the [SIL OFL 1.1](packages/web/public/fonts/OFL.txt). See [TRADEMARKS.md](TRADEMARKS.md) for name and logo use, and [SECURITY.md](SECURITY.md) for private vulnerability reporting.

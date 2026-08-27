@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Time to Gap Fill",
   "category": "gaps",
-  "summary": "The same question as gap-fill — denominator: sessions that opened away from the prior close, roll days excluded; numerator: the ones that traded back to it — read through the minutes-to-fill distribution attached to the result. That distribution is computed over filled sessions only: a fast median fill time says nothing about the sessions that never filled, so always read the clock next to the fill rate itself. Size and direction filters show how the clock moves with the gap.",
+  "summary": "The same question as gap-fill: denominator: sessions that opened away from the prior close, roll days excluded; numerator: the ones that traded back to it: read through the minutes-to-fill distribution attached to the result. That distribution is computed over filled sessions only: a fast median fill time says nothing about the sessions that never filled, so always read the clock next to the fill rate itself. Size and direction filters show how the clock moves with the gap.",
   "outcome": "gapFill",
   "params": [
     {

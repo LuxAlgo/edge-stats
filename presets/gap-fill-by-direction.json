@@ -17,7 +17,7 @@
   "deltas": [
     "both directions in one result, each with its own N and 95% CI",
     "a size floor keeps micro-gaps from diluting the comparison",
-    "any further condition — weekday, events, volatility regime — applies to both rows at once"
+    "any further condition: weekday, events, volatility regime: applies to both rows at once"
   ],
   "library": [
     {

@@ -3,7 +3,7 @@
   "version": 1,
   "title": "NR7 Range vs ATR",
   "category": "session-shape",
-  "summary": "Among NR7 sessions — the narrowest range of the trailing seven, a flag the session earns itself — how often that same session's range still reached at least r times the prior 14-session ATR. Flag and measurement land on the same session, so this quantifies how deep NR7 compression runs against the longer volatility yardstick; the attached range-vs-ATR distribution is the fuller picture. It does not measure what happened the day after an NR7 — that question needs a next-session range outcome, which this preset does not pretend to have.",
+  "summary": "Among NR7 sessions: the narrowest range of the trailing seven, a flag the session earns itself: how often that same session's range still reached at least r times the prior 14-session ATR. Flag and measurement land on the same session, so this quantifies how deep NR7 compression runs against the longer volatility yardstick; the attached range-vs-ATR distribution is the fuller picture. It does not measure what happened the day after an NR7: that question needs a next-session range outcome, which this preset does not pretend to have.",
   "outcome": "hit(rangeVsAtr, gte, {r})",
   "where": "nr7",
   "params": [

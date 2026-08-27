@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Opening Range Breakout",
   "category": "opening-range",
-  "summary": "Of the sessions with a formed opening range, how often the range broke — in either or a chosen direction — plus time-to-break. Any derived window works (5/10/15/30/60 by default; add any window to the symbol config). Pair with orb-false-break and orb-target for the failure rate and the extension ladder.",
+  "summary": "Of the sessions with a formed opening range, how often the range broke: in either or a chosen direction: plus time-to-break. Any derived window works (5/10/15/30/60 by default; add any window to the symbol config). Pair with orb-false-break and orb-target for the failure rate and the extension ladder.",
   "outcome": "orbBreak({window}, {dir})",
   "params": [
     {

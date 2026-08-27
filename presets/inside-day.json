@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Inside Day Follow-Through",
   "category": "session-shape",
-  "summary": "Of the sessions whose entire range sat inside the prior session's range, how often the NEXT session closed green. The denominator is inside sessions that have a next session on record; the numerator is the ones whose next session closed above its own open. This measures direction only, not the size of what followed — and it only means something next to the unconditional next-session green rate, so compare against the baseline before reading anything into it.",
+  "summary": "Of the sessions whose entire range sat inside the prior session's range, how often the NEXT session closed green. The denominator is inside sessions that have a next session on record; the numerator is the ones whose next session closed above its own open. This measures direction only, not the size of what followed, and it only means something next to the unconditional next-session green rate, so compare against the baseline before reading anything into it.",
   "outcome": "nextCloseGreen",
   "where": "insideDay",
   "deltas": [

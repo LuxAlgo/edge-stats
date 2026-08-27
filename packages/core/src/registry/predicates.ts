@@ -135,7 +135,7 @@ export const predicates: PredicateDef[] = [
     kind: "predicate",
     name: "dayBeforeEvent",
     title: "Trading day before event",
-    doc: "The NEXT trading session for this symbol is an event day — trading-calendar aware, not calendar-day arithmetic.",
+    doc: "The NEXT trading session for this symbol is an event day: trading-calendar aware, not calendar-day arithmetic.",
     args: [{ name: "event", type: "string", required: true, doc: "Event name" }],
     sql: (a) =>
       `EXISTS (SELECT 1 FROM events e WHERE e.event = ${sqlStr(String(a.event))} AND e.date = (
@@ -181,7 +181,7 @@ export const predicates: PredicateDef[] = [
     kind: "predicate",
     name: "fvgPresent",
     title: "Unfilled fair value gap present",
-    doc: "An unfilled session-level FVG sat entirely on the given side of the open at session start. Zones form on prior sessions only — no lookahead.",
+    doc: "An unfilled session-level FVG sat entirely on the given side of the open at session start. Zones form on prior sessions only: no lookahead.",
     args: [
       {
         name: "ref",

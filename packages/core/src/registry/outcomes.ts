@@ -29,7 +29,7 @@ export const outcomes: OutcomeDef[] = [
     kind: "outcome",
     name: "gapFill",
     title: "Gap fill",
-    doc: "Of the sessions that opened with a gap, how often price traded back to the prior session's close. Roll days are excluded by construction — a gap across a futures roll is a roll, not a gap.",
+    doc: "Of the sessions that opened with a gap, how often price traded back to the prior session's close. Roll days are excluded by construction: a gap across a futures roll is a roll, not a gap.",
     args: [],
     eligibility: () => `f.gap_dir IN ('up', 'down')`,
     success: () => "f.gap_filled",
@@ -52,7 +52,7 @@ export const outcomes: OutcomeDef[] = [
     kind: "outcome",
     name: "gapHold",
     title: "Gap holds (gap-and-go)",
-    doc: "Of the sessions that opened with a gap, how often the gap NEVER filled and the session closed beyond its open in the gap's direction — the gap-and-go continuation, measured directly instead of as the complement of the fill rate.",
+    doc: "Of the sessions that opened with a gap, how often the gap NEVER filled and the session closed beyond its open in the gap's direction: the gap-and-go continuation, measured directly instead of as the complement of the fill rate.",
     args: [
       {
         name: "dir",
@@ -108,7 +108,7 @@ export const outcomes: OutcomeDef[] = [
     kind: "outcome",
     name: "nextCloseGreen",
     title: "Next session closes green",
-    doc: "How often the NEXT session closed green given today's conditions — the day-after family of questions as one outcome.",
+    doc: "How often the NEXT session closed green given today's conditions: the day-after family of questions as one outcome.",
     args: [],
     eligibility: () => "f.next_green IS NOT NULL",
     success: () => "f.next_green",
@@ -329,7 +329,7 @@ export const outcomes: OutcomeDef[] = [
     kind: "outcome",
     name: "hit",
     title: "Threshold hit (generic)",
-    doc: "The escape hatch: P(field ⋈ value) for any numeric field in the registry. Composable with any conditions — if the stat you want is not a named outcome, it is probably one hit() away.",
+    doc: "The escape hatch: P(field ⋈ value) for any numeric field in the registry. Composable with any conditions: if the stat you want is not a named outcome, it is probably one hit() away.",
     args: [
       {
         name: "field",

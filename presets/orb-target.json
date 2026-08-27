@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Opening Range Extension Targets",
   "category": "opening-range",
-  "summary": "Of the sessions whose opening range first broke in the given direction, how often price extended at least r times the range beyond the broken side. Re-run across a ladder of r values and the hit rates trace the extension curve; the attached distribution of realized extensions gives the same curve from one run. The denominator is breaking sessions only — multiply by the break rate for per-session odds.",
+  "summary": "Of the sessions whose opening range first broke in the given direction, how often price extended at least r times the range beyond the broken side. Re-run across a ladder of r values and the hit rates trace the extension curve; the attached distribution of realized extensions gives the same curve from one run. The denominator is breaking sessions only: multiply by the break rate for per-session odds.",
   "outcome": "orbTargetHit({window}, {r}, {dir})",
   "params": [
     {
@@ -30,7 +30,7 @@
     }
   ],
   "deltas": [
-    "r is continuous — the target ladder is yours, not a fixed 0.5/1/2 menu",
+    "r is continuous: the target ladder is yours, not a fixed 0.5/1/2 menu",
     "the realized-extension distribution shows the whole curve in one query",
     "N + 95% CI per rung keeps thin ladders honest"
   ],

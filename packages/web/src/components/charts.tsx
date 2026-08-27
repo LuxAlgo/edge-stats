@@ -1,17 +1,18 @@
 /*
   Hand-rolled inline SVG charts: no chart library anywhere. Rect-only
   geometry inside stretched viewBoxes stays crisp at any width; anything
-  with text uses a fixed aspect. Colors come from the theme tokens.
+  with text uses a fixed aspect. One validated data hue carries every
+  estimate; comparisons are told apart by their labels, never by a second
+  hue. Status hues appear only where a status is also written in words.
 */
 import type { DistributionSummary } from "../lib/api";
 import { fmtInt, fmtPct, fmtValue } from "../lib/format";
 
 const TONES = {
-  accent: "var(--accent)",
-  green: "var(--green)",
-  red: "var(--red)",
-  warn: "var(--warn)",
-  violet: "var(--accent-2)",
+  accent: "var(--chart-1)",
+  green: "var(--success)",
+  red: "var(--destructive)",
+  warn: "var(--warning)",
 } as const;
 export type ChartTone = keyof typeof TONES;
 
@@ -50,15 +51,15 @@ export function CiBar({
         est === null ? "estimate withheld" : `estimate ${est.toFixed(1)} percent with 95% CI band`
       }
     >
-      <rect x="0" y="3" width="100" height="6" rx="1.5" fill="var(--track)" />
+      <rect x="0" y="3" width="100" height="6" rx="1.5" fill="var(--chart-track)" />
       {est !== null ? (
-        <rect x="0" y="3" width={est} height="6" rx="1.5" fill={color} opacity="0.45" />
+        <rect x="0" y="3" width={est} height="6" rx="1.5" fill={color} opacity="0.4" />
       ) : null}
       {lo !== null && hi !== null ? (
         <rect x={lo} y="4.9" width={Math.max(hi - lo, 0.4)} height="2.2" fill={color} />
       ) : null}
       {est !== null ? (
-        <rect x={Math.min(est, 99)} y="1" width="1" height="10" fill="var(--text)" />
+        <rect x={Math.min(est, 99)} y="1" width="1" height="10" fill="var(--foreground)" />
       ) : null}
     </svg>
   );
@@ -81,7 +82,7 @@ export function YearBars({
         viewBox={`0 0 ${width} ${height}`}
         width={width}
         height={height}
-        className="block"
+        className="block font-mono"
         role="img"
         aria-label="per-year estimates"
       >
@@ -101,27 +102,26 @@ export function YearBars({
                 y={0}
                 width={barW}
                 height={chartH}
-                fill="var(--track)"
-                opacity="0.55"
+                fill="var(--chart-track)"
+                opacity="0.7"
                 rx="2"
               />
-              <rect x={x} y={chartH - h} width={barW} height={h} fill="var(--accent)" rx="2" />
+              <rect x={x} y={chartH - h} width={barW} height={h} fill="var(--chart-1)" rx="2" />
               <text
                 x={x + barW / 2}
-                y={chartH + 10}
+                y={chartH + 11}
                 textAnchor="middle"
                 fontSize="7.5"
-                fill="var(--text-dim)"
+                fill="var(--muted-foreground)"
               >
                 {y.year}
               </text>
               <text
                 x={x + barW / 2}
-                y={chartH + 19}
+                y={chartH + 20}
                 textAnchor="middle"
                 fontSize="6.5"
-                fill="var(--text-dim)"
-                opacity="0.8"
+                fill="var(--faint)"
               >
                 n {fmtInt(y.n)}
               </text>
@@ -135,9 +135,8 @@ export function YearBars({
 
 /**
  * Distribution strip for a continuous outcome value: min→max track, a box
- * from p25 to p75, a strong median tick and a p90 tick — each labeled in
- * the legend underneath with its value (labels never collide, whatever the
- * skew of the data).
+ * from p25 to p75, a strong median tick and a p90 tick: each labeled in
+ * the legend underneath with its value, so no mark relies on color alone.
  */
 export function PercentileStrip({ dist }: { dist: DistributionSummary }) {
   const span = dist.max - dist.min;
@@ -145,10 +144,10 @@ export function PercentileStrip({ dist }: { dist: DistributionSummary }) {
   const boxLo = x(dist.p25);
   const boxHi = x(dist.p75);
   const marks: { key: string; label: string; value: number; color: string; w: number }[] = [
-    { key: "p25", label: "p25", value: dist.p25, color: "var(--accent)", w: 0.7 },
-    { key: "median", label: "median", value: dist.median, color: "var(--text)", w: 1.1 },
-    { key: "p75", label: "p75", value: dist.p75, color: "var(--accent)", w: 0.7 },
-    { key: "p90", label: "p90", value: dist.p90, color: "var(--accent-2)", w: 0.9 },
+    { key: "p25", label: "p25", value: dist.p25, color: "var(--chart-1)", w: 0.7 },
+    { key: "median", label: "median", value: dist.median, color: "var(--foreground)", w: 1.1 },
+    { key: "p75", label: "p75", value: dist.p75, color: "var(--chart-1)", w: 0.7 },
+    { key: "p90", label: "p90", value: dist.p90, color: "rgba(255,255,255,0.55)", w: 0.9 },
   ];
   return (
     <div>
@@ -159,15 +158,15 @@ export function PercentileStrip({ dist }: { dist: DistributionSummary }) {
         role="img"
         aria-label="value distribution strip"
       >
-        <rect x="0" y="7" width="100" height="2" fill="var(--track)" />
+        <rect x="0" y="7" width="100" height="2" fill="var(--chart-track)" />
         <rect
           x={boxLo}
           y="3.5"
           width={Math.max(boxHi - boxLo, 0.6)}
           height="9"
           rx="1"
-          fill="var(--accent)"
-          opacity="0.28"
+          fill="var(--chart-1)"
+          opacity="0.25"
         />
         {marks.map((m) => (
           <rect
@@ -180,7 +179,7 @@ export function PercentileStrip({ dist }: { dist: DistributionSummary }) {
           />
         ))}
       </svg>
-      <div className="stat mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-dim">
+      <div className="stat mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px] text-faint">
         <span>min {fmtValue(dist.min, dist.unit)}</span>
         {marks.map((m) => (
           <span key={m.key} className="inline-flex items-center gap-1.5">
@@ -189,7 +188,7 @@ export function PercentileStrip({ dist }: { dist: DistributionSummary }) {
               className="inline-block h-3 w-[3px] rounded-sm"
               style={{ background: m.color }}
             />
-            {m.label} <span className="text-ink">{fmtValue(m.value, dist.unit)}</span>
+            {m.label} <span className="text-muted-foreground">{fmtValue(m.value, dist.unit)}</span>
           </span>
         ))}
         <span>max {fmtValue(dist.max, dist.unit)}</span>

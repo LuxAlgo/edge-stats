@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Gap Fill by Gap Size",
   "category": "gaps",
-  "summary": "The gap-fill rate split by gap-size bucket: xs under 0.15% of prior close, s 0.15-0.3%, m 0.3-0.75%, l 0.75-1.5%, xl at or above 1.5%. Each bucket's denominator is the gapped sessions whose absolute gap landed in that band (roll days excluded); the numerator is the ones that traded back to the prior close. The folklore says fill rates fall as gaps grow — the per-bucket intervals let you check whether your market and your sample actually show that, and by how much.",
+  "summary": "The gap-fill rate split by gap-size bucket: xs under 0.15% of prior close, s 0.15-0.3%, m 0.3-0.75%, l 0.75-1.5%, xl at or above 1.5%. Each bucket's denominator is the gapped sessions whose absolute gap landed in that band (roll days excluded); the numerator is the ones that traded back to the prior close. The folklore says fill rates fall as gaps grow: the per-bucket intervals let you check whether your market and your sample actually show that, and by how much.",
   "outcome": "gapFill",
   "params": [
     {
@@ -16,7 +16,7 @@
   ],
   "groupBy": "gapBucket",
   "deltas": [
-    "the buckets are a default view — absGapPct filters give any continuous cut of the same data",
+    "the buckets are a default view: absGapPct filters give any continuous cut of the same data",
     "per-bucket N and 95% CI instead of one blended fill rate",
     "time-to-fill distribution attached to every run"
   ],

@@ -1,5 +1,5 @@
 /*
-  Presets: the report catalog. Each preset is one versioned JSON file —
+  Presets: the report catalog. Each preset is one versioned JSON file:
   an outcome, an optional base condition, parameters that expand into DSL
   fragments, and original definition prose. The catalog page, the CLI, the
   dashboard, and the MCP server all enumerate the same folder. "N reports"
@@ -34,7 +34,7 @@ export const presetSchema = z.object({
   version: z.number().int().positive(),
   title: z.string(),
   category: z.string(),
-  /** Original definition prose — what the number means, in plain language. */
+  /** Original definition prose: what the number means, in plain language. */
   summary: z.string(),
   /** Outcome call template; {param} placeholders substitute outcome-target params. */
   outcome: z.string(),

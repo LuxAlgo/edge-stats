@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Green Rate by Weekday",
   "category": "seasonality",
-  "summary": "The share of sessions closing above their open, split by weekday. Each row's denominator is every complete session on that weekday in your data; the numerator is the green ones. Weekday folklore is abundant and mostly noise — the per-row intervals and the stability split are the test, and the attached open-to-close return distribution shows whether a 'strong day' is a rate effect or a size effect.",
+  "summary": "The share of sessions closing above their open, split by weekday. Each row's denominator is every complete session on that weekday in your data; the numerator is the green ones. Weekday folklore is abundant and mostly noise: the per-row intervals and the stability split are the test, and the attached open-to-close return distribution shows whether a 'strong day' is a rate effect or a size effect.",
   "outcome": "closeGreen",
   "groupBy": "dayOfWeek",
   "deltas": [

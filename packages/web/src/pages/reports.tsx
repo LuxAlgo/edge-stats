@@ -4,6 +4,7 @@
   honest "N too small", never a bare number.
 */
 import { useCallback, useState } from "react";
+import { ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import type { Preset, PresetRunResult, QueryResult } from "../lib/api";
 import { api } from "../lib/api";
@@ -11,7 +12,6 @@ import { useAsync, useCachedAsync, useUrlParams, withQuerySlot } from "../lib/ho
 import { EnvelopeFooter } from "../components/results-panel";
 import { Estimate } from "../components/estimate";
 import {
-  Badge,
   Button,
   CodeBlock,
   EmptyState,
@@ -44,12 +44,12 @@ function PresetCard({
   );
 
   const body = run.loading ? (
-    <div className="mt-3 space-y-2">
+    <div className="mt-4 space-y-2">
       <Skeleton className="h-9 w-28" />
       <Skeleton className="h-4 w-40" />
     </div>
   ) : run.error ? (
-    <div className="mt-3">
+    <div className="mt-4">
       <ErrorNote error={run.error} compact />
       <div className="mt-2">
         <Button
@@ -62,7 +62,7 @@ function PresetCard({
       </div>
     </div>
   ) : run.data ? (
-    <div className="mt-3 flex items-end justify-between gap-3">
+    <div className="mt-4 flex items-end justify-between gap-3">
       <Estimate
         size="md"
         facts={{
@@ -80,15 +80,15 @@ function PresetCard({
   return (
     <Link
       href={`/report/${preset.id}?symbol=${encodeURIComponent(symbol)}`}
-      className="group block rounded-xl border border-line bg-panel p-5 transition hover:border-accent/60"
+      className="group block rounded-xl border border-border bg-card p-5 transition-colors duration-150 hover:border-white/25"
     >
-      <div className="flex items-center justify-between gap-2">
-        <Badge tone="accent">{preset.category}</Badge>
-        <span className="text-xs text-dim opacity-0 transition group-hover:opacity-100">
-          open report →
-        </span>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-[15px] font-medium tracking-tight">{preset.title}</h3>
+        <ArrowUpRight
+          aria-hidden="true"
+          className="size-4 shrink-0 text-faint opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+        />
       </div>
-      <h3 className="mt-2.5 text-base font-semibold tracking-tight">{preset.title}</h3>
       {body}
     </Link>
   );
@@ -117,8 +117,8 @@ export function ReportsPage() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-dim">
+          <h1 className="text-2xl font-medium tracking-tight">Reports</h1>
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             Every card is one conditional-probability query over your own sessions. The number never
             travels without its sample size and 95% interval: and below the refuse floor there is no
             number at all.
@@ -137,7 +137,7 @@ export function ReportsPage() {
         </div>
       </div>
 
-      <div className="mt-8 space-y-10">
+      <div className="mt-10 space-y-10">
         {symbols.error ? <ErrorNote error={symbols.error} /> : null}
         {presets.error ? <ErrorNote error={presets.error} /> : null}
 
@@ -167,9 +167,8 @@ export function ReportsPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }, (_, i) => (
               <Panel key={i} className="p-5">
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="mt-3 h-5 w-40" />
-                <Skeleton className="mt-4 h-9 w-28" />
+                <Skeleton className="h-5 w-40" />
+                <Skeleton className="mt-5 h-9 w-28" />
                 <Skeleton className="mt-2 h-4 w-44" />
               </Panel>
             ))}
@@ -178,7 +177,7 @@ export function ReportsPage() {
           [...byCategory.entries()].map(([category, items]) => (
             <section key={category}>
               <SectionLabel>{category}</SectionLabel>
-              <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-3.5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {items.map((preset) =>
                   symbol === "" ? null : (
                     <PresetCard

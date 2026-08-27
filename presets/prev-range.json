@@ -20,7 +20,7 @@
     }
   ],
   "deltas": [
-    "generalizes beyond fixed 'open in upper/lower half' cuts — the open position is a continuous filter",
+    "generalizes beyond fixed 'open in upper/lower half' cuts: the open position is a continuous filter",
     "minutes-to-touch distribution included",
     "swap the outcome for touchPrevLow / breakHoldPrevHigh to get the full family from the same registry"
   ],

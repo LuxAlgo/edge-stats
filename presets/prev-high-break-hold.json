@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Prior High Break and Hold",
   "category": "levels",
-  "summary": "Of the sessions that traded at or above the prior session's high, how often they also CLOSED above it. The denominator is touching sessions only, so this measures what a touch became — acceptance above the level versus rejection back under it — not how often the level was reached (that is the touch presets' job). The complement of the estimate, over the same N, is the rejection rate at the prior high.",
+  "summary": "Of the sessions that traded at or above the prior session's high, how often they also CLOSED above it. The denominator is touching sessions only, so this measures what a touch became: acceptance above the level versus rejection back under it: not how often the level was reached (that is the touch presets' job). The complement of the estimate, over the same N, is the rejection rate at the prior high.",
   "outcome": "breakHoldPrevHigh",
   "deltas": [
     "touch, hold, and rejection all come from one stated denominator",

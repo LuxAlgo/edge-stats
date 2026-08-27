@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Prior High Touch by Open Location",
   "category": "levels",
-  "summary": "How often the session reached the prior session's high, given where it opened inside the prior range — by default, opens in the upper half (open position at least 0.5, where 0 is the prior low and 1 the prior high). The denominator is sessions with a prior range that opened inside the chosen band; the numerator is the ones that traded at or above the prior high. Mind the geometry: a band nearer the level mechanically shortens the distance to it, so part of any rate difference is position, not behavior. Grouped by weekday by default; regroup or ungroup per run.",
+  "summary": "How often the session reached the prior session's high, given where it opened inside the prior range: by default, opens in the upper half (open position at least 0.5, where 0 is the prior low and 1 the prior high). The denominator is sessions with a prior range that opened inside the chosen band; the numerator is the ones that traded at or above the prior high. Mind the geometry: a band nearer the level mechanically shortens the distance to it, so part of any rate difference is position, not behavior. Grouped by weekday by default; regroup or ungroup per run.",
   "outcome": "touchPrevHigh",
   "params": [
     {

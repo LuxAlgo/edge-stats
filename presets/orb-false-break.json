@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Opening Range False Break",
   "category": "opening-range",
-  "summary": "Of the sessions whose opening range FIRST broke in the given direction, how often that break failed — price closed back inside the range or beyond the opposite side. The denominator is breaking sessions only, not all sessions: this is the failure rate of the breakout itself, the number any range-break rule quietly depends on. Read it alongside orb (how often a break happens at all) and orb-target (how far the survivors ran).",
+  "summary": "Of the sessions whose opening range FIRST broke in the given direction, how often that break failed: price closed back inside the range or beyond the opposite side. The denominator is breaking sessions only, not all sessions: this is the failure rate of the breakout itself, the number any range-break rule quietly depends on. Read it alongside orb (how often a break happens at all) and orb-target (how far the survivors ran).",
   "outcome": "orbFalseBreak({window}, {dir})",
   "params": [
     {
@@ -23,7 +23,7 @@
     }
   ],
   "deltas": [
-    "the failure denominator is explicit — breaking sessions, not all sessions",
+    "the failure denominator is explicit: breaking sessions, not all sessions",
     "window and direction are parameters, so the failure rate is checkable for your exact setup",
     "compose with gap state, weekday, or event days to see when failures cluster"
   ],

@@ -1,6 +1,6 @@
 /*
   Data-fetching hooks. Every fetch is tied to an AbortController that the
-  effect cleanup aborts — navigating away cancels in-flight work.
+  effect cleanup aborts: navigating away cancels in-flight work.
 */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "wouter";

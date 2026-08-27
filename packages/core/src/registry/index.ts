@@ -52,7 +52,7 @@ export interface RegistryEntryDescription {
   library?: { kind: string; slug: string; url: string }[];
 }
 
-/** Serializable registry description — drives the CLI, MCP, dashboard, and docs. */
+/** Serializable registry description: drives the CLI, MCP, dashboard, and docs. */
 export function describeRegistry(
   kind?: "field" | "predicate" | "outcome",
 ): RegistryEntryDescription[] {

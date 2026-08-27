@@ -50,12 +50,12 @@ function SetupCard({ setup }: { setup: LiveSetupState }) {
     <Panel className="p-5">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="text-base font-semibold tracking-tight">{setup.symbol}</span>
+          <span className="text-base font-medium tracking-tight">{setup.symbol}</span>
           <Badge tone="dim">session {setup.sessionKey}</Badge>
         </div>
         <Badge tone={PHASE_TONE[setup.phase]}>{setup.phase}</Badge>
       </div>
-      <code className="stat mt-3 block overflow-x-auto whitespace-nowrap rounded-md border border-line bg-panel-2 px-2 py-1.5 font-mono text-xs">
+      <code className="stat mt-3 block overflow-x-auto whitespace-nowrap rounded-lg border border-white/[0.08] bg-black/60 px-2.5 py-1.5 font-mono text-xs">
         {setup.dsl}
       </code>
       <div className="mt-4">
@@ -70,7 +70,7 @@ function SetupCard({ setup }: { setup: LiveSetupState }) {
           }}
         />
       </div>
-      <div className="stat mt-3 flex items-center justify-between text-[11px] text-dim">
+      <div className="stat mt-4 flex items-center justify-between font-mono text-[11px] text-faint">
         <span>trade date {setup.tradeDate}</span>
         <span title={fmtDateTime(setup.evaluatedAt)}>
           evaluated {relTime(Date.parse(setup.evaluatedAt))}
@@ -96,15 +96,15 @@ export function LivePage() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Live Board</h1>
-          <p className="mt-1 max-w-2xl text-sm leading-relaxed text-dim">
+          <h1 className="text-2xl font-medium tracking-tight">Live Board</h1>
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground">
             Watches re-evaluate your queries against the developing session and alert through your
             own sinks. What you see is the historical rate given today's state so far: a frequency,
             not a forecast.
           </p>
         </div>
         {state.data?.enabled ? (
-          <span className="stat text-xs text-dim">
+          <span className="stat font-mono text-[11px] text-faint">
             refreshes every 30s · last {relTime(lastRefresh)}
           </span>
         ) : null}
@@ -144,7 +144,7 @@ export function LivePage() {
                 <div className="mt-2">
                   <CodeBlock>{"edgestats live"}</CodeBlock>
                 </div>
-                <p className="mt-3 text-xs leading-relaxed text-dim">
+                <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
                   Every evaluation snapshot is stored locally and every alert payload is versioned.
                   replayable and auditable, never a mystery number. Sinks include webhooks, chat
                   bots, an NDJSON tail, and desktop notifications; nothing leaves your machine
@@ -167,7 +167,7 @@ export function LivePage() {
                 <SetupCard key={setup.id} setup={setup} />
               ))}
             </div>
-            <p className="mt-6 text-[11px] italic text-dim">{LIVE_FOOTNOTE}</p>
+            <p className="mt-6 font-mono text-[10.5px] text-faint">{LIVE_FOOTNOTE}</p>
           </>
         ) : null}
       </div>

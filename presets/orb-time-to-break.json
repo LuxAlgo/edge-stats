@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Time to Opening Range Break",
   "category": "opening-range",
-  "summary": "The opening-range break rate, read through the minutes-from-open-to-first-break distribution attached to the result. The denominator is sessions with a formed range; the clock is computed over breaking sessions only, so a fast median break coexists with however many sessions never broke — read the two together. Direction and any composed condition reshape both the rate and the clock.",
+  "summary": "The opening-range break rate, read through the minutes-from-open-to-first-break distribution attached to the result. The denominator is sessions with a formed range; the clock is computed over breaking sessions only, so a fast median break coexists with however many sessions never broke: read the two together. Direction and any composed condition reshape both the rate and the clock.",
   "outcome": "orbBreak({window}, {dir})",
   "params": [
     {
@@ -24,7 +24,7 @@
   ],
   "deltas": [
     "median and quantile break times, not a single average",
-    "any derived window works — the clock is per-window, not one-size",
+    "any derived window works: the clock is per-window, not one-size",
     "rate and clock arrive in one envelope with the same N"
   ],
   "library": [

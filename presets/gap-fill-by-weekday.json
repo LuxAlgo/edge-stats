@@ -25,7 +25,7 @@
     "one grouped result instead of five separate weekday reports",
     "per-weekday N and 95% CI expose which day-of-week differences are noise",
     "direction and size filters stack on top of the weekday split",
-    "unlimited history — your data decides the depth"
+    "unlimited history: your data decides the depth"
   ],
   "library": [
     {

@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Prior Low Touch by Open Location",
   "category": "levels",
-  "summary": "How often the session reached the prior session's low, given where it opened inside the prior range — by default, opens in the lower half (open position at most 0.5, where 0 is the prior low and 1 the prior high). The denominator is sessions with a prior range that opened inside the chosen band; the numerator is the ones that traded at or below the prior low. As with the prior-high twin, opens nearer the level are mechanically closer to touching it — separate that geometry from behavior before drawing conclusions.",
+  "summary": "How often the session reached the prior session's low, given where it opened inside the prior range: by default, opens in the lower half (open position at most 0.5, where 0 is the prior low and 1 the prior high). The denominator is sessions with a prior range that opened inside the chosen band; the numerator is the ones that traded at or below the prior low. As with the prior-high twin, opens nearer the level are mechanically closer to touching it: separate that geometry from behavior before drawing conclusions.",
   "outcome": "touchPrevLow",
   "params": [
     {

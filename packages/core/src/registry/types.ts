@@ -97,7 +97,7 @@ export function requireWindow(minutes: number, ctx: CompileCtx): number {
   if (!ctx.orWindows.includes(minutes)) {
     throw new QueryError(
       `no ${minutes}-minute opening-range window derived for this symbol`,
-      `derived windows: ${ctx.orWindows.map((w) => `${w}m`).join(", ")} — add ${minutes} to the symbol's orWindows in edge-stats.config.json and re-run \`edgestats sync\``,
+      `derived windows: ${ctx.orWindows.map((w) => `${w}m`).join(", ")}: add ${minutes} to the symbol's orWindows in edge-stats.config.json and re-run \`edgestats sync\``,
     );
   }
   return minutes;

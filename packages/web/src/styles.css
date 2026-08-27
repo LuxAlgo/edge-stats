@@ -1,59 +1,120 @@
 @import "tailwindcss";
 
 /*
-  Edge Stats dashboard theme — original design language, dark-first.
-  Tokens only here; components consume them. (The look is ours: no
-  borrowing of anyone's product visuals.)
-*/
-:root {
-  --bg: #0a0d13;
-  --panel: #10141d;
-  --panel-2: #161b27;
-  --border: #232a3a;
-  --text: #e8ebf2;
-  --text-dim: #8b93a7;
-  --accent: #4f7cff;
-  --accent-2: #8b5cf6;
-  --green: #22c07a;
-  --red: #e5484d;
-  --warn: #f5a623;
+  Edge Stats dashboard theme: the LuxAlgo data-canvas system on shadcn
+  semantic tokens. Pure-black page, #0a0a0a panels, white-alpha hairlines,
+  a three-step text ladder, and mono for data. Elevation is luminance, not
+  shadow; color appears only in charts and status.
 
-  /* Chart track behind bars and whiskers. */
-  --track: #1a2030;
+  Fonts are Geist and Geist Mono (SIL OFL 1.1, license in
+  public/fonts/OFL.txt), served locally: no network fetch, ever.
+*/
+
+@font-face {
+  font-family: "Geist";
+  src: url("/fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* shadcn semantic slots, data-canvas values. */
+  --background: #000000;
+  --foreground: #ededed;
+  --card: #0a0a0a;
+  --card-foreground: #ededed;
+  --popover: #0f0f0f;
+  --popover-foreground: #ededed;
+  --primary: #ededed;
+  --primary-foreground: #0a0a0a;
+  --secondary: rgba(255, 255, 255, 0.08);
+  --secondary-foreground: #ededed;
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #a0a0a0;
+  --accent: rgba(255, 255, 255, 0.06);
+  --accent-foreground: #ededed;
+  --destructive: #f23645;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.14);
+  --ring: rgba(255, 255, 255, 0.35);
+  --radius: 0.5rem;
+
+  /* Text ladder below muted-foreground: labels, fingerprints, footnotes. */
+  --faint: #7d7d7d;
+
+  /* Status (reserved: outcome and guard states only, never decoration). */
+  --success: #35cd78;
+  --warning: #f5b944;
+
+  /* The one data hue (landing sky-500), validated against the #0a0a0a
+     card surface (OKLCH band, chroma, contrast). Comparisons are told
+     apart by their labels, never by a second hue. */
+  --chart-1: #0d8ed6;
+  --chart-track: rgba(255, 255, 255, 0.06);
+
+  /* Brand hues the prism hairline mixes from (see landing-page /brand). */
+  --sky-400: #35a2de;
+  --purple-500: #9200ff;
+  --pink-500: #ff00d6;
 
   color-scheme: dark;
 }
 
-/* Map the tokens into Tailwind v4 utilities: bg-panel, text-dim, border-line, … */
 @theme inline {
-  --color-bg: var(--bg);
-  --color-panel: var(--panel);
-  --color-panel-2: var(--panel-2);
-  --color-line: var(--border);
-  --color-ink: var(--text);
-  --color-dim: var(--text-dim);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
-  --color-accent-2: var(--accent-2);
-  --color-pos: var(--green);
-  --color-neg: var(--red);
-  --color-warn: var(--warn);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-faint: var(--faint);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-chart-1: var(--chart-1);
+  --color-sky-400: var(--sky-400);
+  --color-purple-500: var(--purple-500);
+  --color-pink-500: var(--pink-500);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family:
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--accent);
-  color: #fff;
+  background: var(--foreground);
+  color: var(--background);
 }
 
 /* Every statistic lines up: tabular digits wherever numbers render. */
@@ -61,32 +122,14 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-/* Loading skeletons. */
-@keyframes es-shimmer {
-  0% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0.45;
-  }
-}
-.skeleton {
-  background: var(--panel-2);
-  border-radius: 6px;
-  animation: es-shimmer 1.4s ease-in-out infinite;
-}
-
-/* Focus visibly, in the accent — keyboard users are first-class. */
+/* Focus visibly; keyboard users are first-class. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--ring);
   outline-offset: 1px;
   border-radius: 4px;
 }
 
-/* Quiet scrollbars that match the panels. */
+/* Quiet scrollbars that match the canvas. */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
@@ -94,7 +137,7 @@ body {
 
 /* Native date fields: dark, compact, calendar icon dimmed to match. */
 input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(0.65);
-  opacity: 0.7;
+  filter: invert(0.6);
+  opacity: 0.6;
   cursor: pointer;
 }

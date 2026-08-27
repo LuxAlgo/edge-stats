@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Opening Range Break Direction",
   "category": "opening-range",
-  "summary": "Of the sessions with a formed opening range, how often the FIRST break went the chosen way. Up-rate and down-rate share this denominator, so the two runs plus the never-broke remainder partition every session exactly. Grouped by weekday by default, since directional drift is where day-of-week claims usually live — check each row's N and interval before crediting one.",
+  "summary": "Of the sessions with a formed opening range, how often the FIRST break went the chosen way. Up-rate and down-rate share this denominator, so the two runs plus the never-broke remainder partition every session exactly. Grouped by weekday by default, since directional drift is where day-of-week claims usually live: check each row's N and interval before crediting one.",
   "outcome": "orbBreak({window}, {dir})",
   "params": [
     {

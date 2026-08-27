@@ -3,7 +3,7 @@
   "version": 1,
   "title": "Range vs ATR",
   "category": "volatility",
-  "summary": "How often the session's high-to-low range reached at least r times the prior 14-session average true range. The denominator is sessions with an ATR on record — the first fourteen sessions of a series have none and are excluded, not zero-filled; the numerator is the ones whose range-to-ATR ratio met the threshold. The ATR uses strictly prior sessions, so as a condition elsewhere it is knowable before the open; here, the attached ratio distribution is the full volatility profile of which this rate is one cut.",
+  "summary": "How often the session's high-to-low range reached at least r times the prior 14-session average true range. The denominator is sessions with an ATR on record: the first fourteen sessions of a series have none and are excluded, not zero-filled; the numerator is the ones whose range-to-ATR ratio met the threshold. The ATR uses strictly prior sessions, so as a condition elsewhere it is knowable before the open; here, the attached ratio distribution is the full volatility profile of which this rate is one cut.",
   "outcome": "hit(rangeVsAtr, gte, {r})",
   "params": [
     {
@@ -15,7 +15,7 @@
     }
   ],
   "deltas": [
-    "r is continuous — expansion is your threshold, not a preset author's",
+    "r is continuous: expansion is your threshold, not a preset author's",
     "the ratio distribution shows the whole profile in one run",
     "warm-up sessions are excluded from the denominator, not silently zeroed"
   ]

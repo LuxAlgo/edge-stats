@@ -4,6 +4,7 @@
   debounced and aborted on change; results render in the shared panel.
 */
 import { useMemo, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "wouter";
 import type {
   Preset,
@@ -69,7 +70,9 @@ function ParamControl({
           onChange={onChange}
           placeholder={placeholder}
         />
-        {spec.type === "duration" ? <span className="text-xs text-dim">min</span> : null}
+        {spec.type === "duration" ? (
+          <span className="text-xs text-muted-foreground">min</span>
+        ) : null}
       </div>
     );
   } else {
@@ -84,8 +87,10 @@ function ParamControl({
   }
   return (
     <div>
-      <Labeled label={spec.name}>{input}</Labeled>
-      <p className="mt-1 text-[11px] leading-snug text-dim">{spec.doc}</p>
+      <Labeled label={spec.name} code>
+        {input}
+      </Labeled>
+      <p className="mt-1.5 text-[11px] leading-snug text-faint">{spec.doc}</p>
     </div>
   );
 }
@@ -172,7 +177,10 @@ export function ReportPage() {
       <EmptyState title={`No preset named '${id}'`}>
         <p>
           The catalog is the <code>presets/</code> folder: this id isn't in it.{" "}
-          <Link href="/" className="text-accent underline-offset-2 hover:underline">
+          <Link
+            href="/"
+            className="text-foreground underline decoration-white/25 underline-offset-4 hover:decoration-white/60"
+          >
             Back to the reports grid
           </Link>
           .
@@ -185,9 +193,10 @@ export function ReportPage() {
     <div>
       <Link
         href={`/?symbol=${encodeURIComponent(symbol)}`}
-        className="text-sm text-dim hover:text-ink"
+        className="inline-flex items-center gap-1.5 text-[13px] text-muted-foreground transition-colors duration-150 hover:text-foreground"
       >
-        ← all reports
+        <ArrowLeft className="size-3.5" aria-hidden="true" />
+        all reports
       </Link>
 
       {preset === null ? (
@@ -198,11 +207,15 @@ export function ReportPage() {
       ) : (
         <div className="mt-3">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-semibold tracking-tight">{preset.title}</h1>
+            <h1 className="text-2xl font-medium tracking-tight">{preset.title}</h1>
             <Badge tone="accent">{preset.category}</Badge>
-            <Badge tone="dim">v{preset.version}</Badge>
+            <Badge tone="dim">
+              <span className="font-mono">v{preset.version}</span>
+            </Badge>
           </div>
-          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-dim">{preset.summary}</p>
+          <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-muted-foreground">
+            {preset.summary}
+          </p>
         </div>
       )}
 
@@ -301,7 +314,7 @@ export function ReportPage() {
             >
               reset
             </Button>
-            <span className="text-[11px] text-dim">every control lives in the URL</span>
+            <span className="font-mono text-[10px] text-faint">every control lives in the URL</span>
           </div>
         </Panel>
 

@@ -1,6 +1,6 @@
 /*
   Typed same-origin client for the `edgestats serve` API. Every type comes
-  from the engine itself via type-only imports — nothing from core lands in
+  from the engine itself via type-only imports; nothing from core lands in
   the browser bundle, but the dashboard consumes the exact same envelope
   the CLI and the MCP server emit.
 */
