@@ -1,6 +1,6 @@
 # Changes to licensing, trademarks, and CI definitions require LuxAlgo review.
-/LICENSE @LuxAlgo/opensource
-/DATA_LICENSE @LuxAlgo/opensource
-/TRADEMARKS.md @LuxAlgo/opensource
-/.github/workflows/ @LuxAlgo/opensource
-/.github/CODEOWNERS @LuxAlgo/opensource
+/LICENSE @smack369
+/DATA_LICENSE @smack369
+/TRADEMARKS.md @smack369
+/.github/workflows/ @smack369
+/.github/CODEOWNERS @smack369
