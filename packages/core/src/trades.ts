@@ -1,7 +1,7 @@
 /*
-  Journal bridge: turns the user's own executed trades into journal event
-  tags (TRADED, TRADED_WIN, TRADED_LOSS) stored as ordinary event files, so
-  every report, predicate, and the eventOccurs outcome can condition on the
+  Trade tags: turns the user's own executed trades into day tags (TRADED,
+  TRADED_WIN, TRADED_LOSS) stored as ordinary event files, so every
+  report, predicate, and the eventOccurs outcome can condition on the
   user's real participation. Pure logic only: nothing in core talks to a
   broker. The CLI feeds this module normalized fills (from
   @luxalgo/broker-sdk or a statement CSV); the same functions back the MCP
@@ -28,7 +28,7 @@ import type { Store } from "./store/store";
 import type { SessionWindow } from "./calendar/types";
 
 /** One executed fill, already normalized. Mirrors the broker-sdk shape. */
-export interface JournalFill {
+export interface TradeFill {
   symbol: string;
   side: "buy" | "sell";
   /** Always positive; `side` carries the direction. */
@@ -41,11 +41,11 @@ export interface JournalFill {
   executedAt?: string;
 }
 
-export const JOURNAL_EVENTS = ["TRADED", "TRADED_WIN", "TRADED_LOSS"] as const;
-export type JournalEventName = (typeof JOURNAL_EVENTS)[number];
+export const TRADE_TAGS = ["TRADED", "TRADED_WIN", "TRADED_LOSS"] as const;
+export type TradeTagName = (typeof TRADE_TAGS)[number];
 
-export interface JournalBuildOptions {
-  fills: JournalFill[];
+export interface BuildTradeTagsOptions {
+  fills: TradeFill[];
   /** Session windows per STORE symbol, ascending by endMs. */
   windowsBySymbol: Record<string, SessionWindow[]>;
   /** Broker symbol -> store symbol (e.g. ESU6 -> ES). Identity by default. */
@@ -58,7 +58,7 @@ export interface JournalBuildOptions {
   importedOn: string;
 }
 
-export interface JournalBuildResult {
+export interface BuildTradeTagsResult {
   events: EventFile[];
   counts: {
     fills: number;
@@ -97,7 +97,7 @@ export function assignTradeDate(tsMs: number, windows: SessionWindow[]): string 
   return hit?.tradeDate ?? null;
 }
 
-interface DatedFill extends JournalFill {
+interface DatedFill extends TradeFill {
   storeSymbol: string;
   tradeDate: string;
   tsMs: number;
@@ -148,8 +148,8 @@ export function realizedPnlByDay(
   return byDay;
 }
 
-/** Build the journal event files from normalized fills. Pure. */
-export function buildJournalEvents(opts: JournalBuildOptions): JournalBuildResult {
+/** Build the trade-tag event files from normalized fills. Pure. */
+export function buildTradeTags(opts: BuildTradeTagsOptions): BuildTradeTagsResult {
   const { fills, windowsBySymbol, map = {}, multipliers = {}, source, importedOn } = opts;
   const dated: DatedFill[] = [];
   let skippedNoTimestamp = 0;
@@ -188,8 +188,8 @@ export function buildJournalEvents(opts: JournalBuildOptions): JournalBuildResul
     .sort();
 
   const coverageFrom = tradedDates[0] ?? importedOn;
-  const version = `journal-${importedOn}`;
-  const file = (event: JournalEventName, dates: string[], doc: string): EventFile => ({
+  const version = `trades-${importedOn}`;
+  const file = (event: TradeTagName, dates: string[], doc: string): EventFile => ({
     event,
     version,
     sources: [source],
@@ -229,21 +229,21 @@ export function buildJournalEvents(opts: JournalBuildOptions): JournalBuildResul
 }
 
 /**
- * Write the journal event files into the store's events directory and
- * refresh the events table. Re-importing overwrites the previous journal.
+ * Write the trade-tag event files into the store's events directory and
+ * refresh the events table. Re-importing overwrites the previous tags.
  */
-export async function writeJournalEvents(store: Store, events: EventFile[]): Promise<number> {
+export async function writeTradeTags(store: Store, events: EventFile[]): Promise<number> {
   const dir = eventsDir(store.dataDir);
   mkdirSync(dir, { recursive: true });
   for (const ev of events) {
-    const path = join(dir, `journal-${ev.event.toLowerCase()}.json`);
+    const path = join(dir, `trades-${ev.event.toLowerCase()}.json`);
     writeFileSync(path, `${JSON.stringify(ev, null, 2)}\n`);
   }
   return syncEventsIntoStore(store);
 }
 
-/** The journal events currently present in a store's events directory. */
-export function journalEventsIn(files: EventFile[]): EventFile[] {
-  const names = new Set<string>(JOURNAL_EVENTS);
+/** The trade tags currently present in a store's events directory. */
+export function tradeTagsIn(files: EventFile[]): EventFile[] {
+  const names = new Set<string>(TRADE_TAGS);
   return files.filter((f) => names.has(f.event));
 }

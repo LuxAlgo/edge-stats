@@ -17,6 +17,6 @@
   "deltas": [
     "one parameterized preset covers the entire pre-event family",
     "holiday-aware adjacency instead of calendar-day arithmetic",
-    "user-supplied event files (earnings, expiries, journal tags) work identically"
+    "user-supplied event files (earnings, expiries, your own day tags) work identically"
   ]
 }

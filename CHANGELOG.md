@@ -8,13 +8,13 @@ uses [semantic versioning](https://semver.org/).
 
 ### Added
 
-- Journal: `edgestats journal import` turns your own executed trades
+- Trade tags: `edgestats trades import` turns your own executed trades
   (read-only via `@luxalgo/broker-sdk`, or a broker statement CSV) into
   TRADED / TRADED_WIN / TRADED_LOSS event tags, day-assigned with the
   store's session calendars and classified by signed FIFO realized P&L.
-- `eventOccurs(event)` outcome: any event calendar (macro or journal) as
+- `eventOccurs(event)` outcome: any event calendar (macro or trade tags) as
   a rate under arbitrary conditions.
-- `edge_journal` MCP tool reporting the store's journal tags.
+- `edge_trades` MCP tool reporting the store's trade tags.
 
 ### Changed
 

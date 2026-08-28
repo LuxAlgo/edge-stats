@@ -29,4 +29,4 @@ corrupts every query conditioned on it.
 
 Drop any file matching the schema into your store's `events/` directory and
 re-run `edgestats sync`: earnings dates, contract expiries, your own
-journal tags. The predicate namespace is yours.
+day tags. The predicate namespace is yours.

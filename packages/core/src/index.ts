@@ -57,8 +57,8 @@ export * from "./presets/presets";
 // events
 export * from "./events";
 
-// journal (trades -> day tags; pure, broker-free)
-export * from "./journal";
+// trade tags (fills -> day tags; pure, broker-free)
+export * from "./trades";
 
 // sync
 export { syncSymbols, freshness } from "./sync";

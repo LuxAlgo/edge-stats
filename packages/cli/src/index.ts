@@ -25,7 +25,7 @@ import {
 import { openContext } from "./context";
 import { runInit } from "./commands/init";
 import { runBench } from "./commands/bench";
-import { runJournalImport, runJournalStatus } from "./commands/journal";
+import { runTradesImport, runTradesStatus } from "./commands/trades";
 import { runLiveAlerts, runLiveOnce, runLiveReplay, runLiveWatch } from "./commands/live";
 import { startServer } from "./commands/serve";
 import { fail, pct, renderResult } from "./render";
@@ -247,14 +247,14 @@ program
     }
   });
 
-const journal = program
-  .command("journal")
+const trades = program
+  .command("trades")
   .description("tag sessions with your own imported trades (TRADED, TRADED_WIN, TRADED_LOSS)");
 
-journal
+trades
   .command("import")
   .description("import fills from a broker (read-only, env credentials) or a statement CSV")
-  .option("--broker <id>", "broker id from @luxalgo/broker-sdk (see `edgestats journal`)")
+  .option("--broker <id>", "broker id from @luxalgo/broker-sdk (see `edgestats trades`)")
   .option("--csv <path>", "broker statement CSV with symbol/side/quantity/price columns")
   .option(
     "--map <FROM=TO...>",
@@ -280,10 +280,10 @@ journal
           fail(`--mult wants SYM=positive-number, got '${k}=${v}'`);
         multipliers[k] = n;
       }
-      const importOpts: Parameters<typeof runJournalImport>[1] = { map, multipliers };
+      const importOpts: Parameters<typeof runTradesImport>[1] = { map, multipliers };
       if (opts.broker !== undefined) importOpts.broker = opts.broker;
       if (opts.csv !== undefined) importOpts.csv = opts.csv;
-      await runJournalImport(ctx, importOpts);
+      await runTradesImport(ctx, importOpts);
     } catch (err) {
       handleError(err);
     } finally {
@@ -291,13 +291,13 @@ journal
     }
   });
 
-journal
+trades
   .command("status", { isDefault: true })
-  .description("show the journal tags currently in the store")
+  .description("show the trade tags currently in the store")
   .action(async () => {
     const ctx = await openContext(dirOpt());
     try {
-      runJournalStatus(ctx);
+      runTradesStatus(ctx);
     } finally {
       await ctx.store.close();
     }

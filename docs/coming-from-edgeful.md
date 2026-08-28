@@ -67,7 +67,7 @@ fields — the same text `edge_reports_list` serves to agents.
 - **Event conditioning everywhere.** FOMC/CPI/NFP/OPEX ship as versioned,
   cited calendars, and `eventDay`, `dayBeforeEvent`, `dayAfterEvent` are
   predicates on **every** outcome — not a separate report family. Drop
-  your own event file in (earnings, expiries, journal tags) and it works
+  your own event file in (earnings, expiries, your own day tags) and it works
   identically.
 - **MCP for agents.** A free local MCP server exposes nine tools —
   registry, query, sessions, presets, freshness, export, live — so your

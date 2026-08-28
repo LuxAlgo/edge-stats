@@ -25,11 +25,11 @@ import {
   findSymbol,
   freshness,
   getSessions,
-  journalEventsIn,
   libraryUrl,
   loadEventFiles,
   runPreset,
   runQuery,
+  tradeTagsIn,
 } from "@luxalgo/edge-stats";
 import { getContext } from "../context";
 
@@ -446,27 +446,27 @@ export function registerEdgeTools(server: McpServer): void {
   );
 
   server.registerTool(
-    "edge_journal",
+    "edge_trades",
     {
-      title: "Journal tags: the user's own imported trades",
+      title: "Trade tags: the user's own imported trades",
       description:
-        "Whether the store carries journal tags built from the user's own executed trades: TRADED (days with at least one fill), TRADED_WIN and TRADED_LOSS (days whose realized P&L, signed FIFO and fee-adjusted, was positive or negative). Returns each tag with its day count, coverage, and import source, or {imported: false} with the CLI command that creates them (`edgestats journal import --broker <id>` or `--csv statement.csv`; this server never touches broker credentials). " +
+        "Whether the store carries trade tags built from the user's own executed trades: TRADED (days with at least one fill), TRADED_WIN and TRADED_LOSS (days whose realized P&L, signed FIFO and fee-adjusted, was positive or negative). Returns each tag with its day count, coverage, and import source, or {imported: false} with the CLI command that creates them (`edgestats trades import --broker <id>` or `--csv statement.csv`; this server never touches broker credentials). " +
         "Use the tags through the normal query tools: eventDay('TRADED') conditions any outcome on the user's participation, and eventOccurs('TRADED_WIN') as an outcome is their realized day-win rate under any conditions. The flagship comparison is edge_query twice: eventOccurs('TRADED_WIN') WHERE eventDay('TRADED') for the overall day-win rate, then add the setup's conditions and compare the two envelopes: N and CI decide whether the difference is real, never the point estimates alone.",
       inputSchema: {},
     },
     async () => {
       try {
         const ctx = await getContext();
-        const journal = journalEventsIn(loadEventFiles(ctx.store.dataDir));
-        if (journal.length === 0) {
+        const tags = tradeTagsIn(loadEventFiles(ctx.store.dataDir));
+        if (tags.length === 0) {
           return json({
             imported: false,
-            note: "No journal tags in this store. The user can create them with `edgestats journal import --broker <id>` (read-only, env credentials) or `edgestats journal import --csv <statement.csv>`.",
+            note: "No trade tags in this store. The user can create them with `edgestats trades import --broker <id>` (read-only, env credentials) or `edgestats trades import --csv <statement.csv>`.",
           });
         }
         return json({
           imported: true,
-          events: journal.map((ev) => ({
+          events: tags.map((ev) => ({
             event: ev.event,
             days: ev.dates.length,
             coverage: ev.coverage,

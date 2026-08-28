@@ -1,6 +1,6 @@
 /*
-  `edgestats journal`: turn your own executed trades into journal event
-  tags (TRADED, TRADED_WIN, TRADED_LOSS) so every report and query can
+  `edgestats trades`: turn your own executed trades into day tags
+  (TRADED, TRADED_WIN, TRADED_LOSS) so every report and query can
   condition on your real participation.
 
   Fills come from @luxalgo/broker-sdk (read-only: this file must never
@@ -13,22 +13,22 @@ import { readFileSync } from "node:fs";
 import { basename } from "node:path";
 import pc from "picocolors";
 import {
-  buildJournalEvents,
+  buildTradeTags,
   defaultSessionKey,
-  journalEventsIn,
   loadEventFiles,
   makeSessionResolver,
-  writeJournalEvents,
+  tradeTagsIn,
+  writeTradeTags,
   type EventFile,
-  type JournalFill,
   type SessionWindow,
+  type TradeFill,
 } from "@luxalgo/edge-stats";
 import { connect, listBrokers, type BrokerId, type Trade } from "@luxalgo/broker-sdk";
 import { parseStatementCsv } from "@luxalgo/broker-sdk/csv";
 import type { CliContext } from "../context";
 import { fail } from "../render";
 
-export interface JournalImportOptions {
+export interface TradesImportOptions {
   broker?: string;
   csv?: string;
   map: Record<string, string>;
@@ -74,14 +74,14 @@ export function credentialsFromEnv(brokerId: string): {
   return { brokerId: info.id, credentials };
 }
 
-async function fetchBrokerFills(broker: string): Promise<{ fills: JournalFill[]; source: string }> {
+async function fetchBrokerFills(broker: string): Promise<{ fills: TradeFill[]; source: string }> {
   const { brokerId, credentials } = credentialsFromEnv(broker);
   const connection = connect({
     broker: brokerId,
     credentials: credentials as never,
   });
   const snapshot = await connection.fetchSnapshot();
-  const fills: JournalFill[] = snapshot.accounts.flatMap((account) =>
+  const fills: TradeFill[] = snapshot.accounts.flatMap((account) =>
     account.trades.map((t: Trade) => ({
       symbol: t.symbol,
       side: t.side,
@@ -97,7 +97,7 @@ async function fetchBrokerFills(broker: string): Promise<{ fills: JournalFill[];
   };
 }
 
-function fillsFromCsv(path: string): { fills: JournalFill[]; source: string } {
+function fillsFromCsv(path: string): { fills: TradeFill[]; source: string } {
   const parsed = parseStatementCsv(readFileSync(path, "utf8"));
   if (parsed.trades.length === 0) {
     fail(
@@ -107,7 +107,7 @@ function fillsFromCsv(path: string): { fills: JournalFill[]; source: string } {
   if (parsed.skippedRows > 0) {
     console.log(pc.dim(`${parsed.skippedRows} unparseable row(s) skipped`));
   }
-  const fills: JournalFill[] = parsed.trades.map((t: Trade) => ({
+  const fills: TradeFill[] = parsed.trades.map((t: Trade) => ({
     symbol: t.symbol,
     side: t.side,
     quantity: t.quantity,
@@ -122,7 +122,7 @@ function isoDay(ms: number): string {
   return new Date(ms).toISOString().slice(0, 10);
 }
 
-export async function runJournalImport(ctx: CliContext, opts: JournalImportOptions): Promise<void> {
+export async function runTradesImport(ctx: CliContext, opts: TradesImportOptions): Promise<void> {
   if ((opts.broker === undefined) === (opts.csv === undefined)) {
     fail("pass exactly one source: --broker <id> or --csv <statement.csv>");
   }
@@ -150,7 +150,7 @@ export async function runJournalImport(ctx: CliContext, opts: JournalImportOptio
     windowsBySymbol[symbol.symbol] = resolver.resolve(symbol, defaultSessionKey(symbol), from, to);
   }
 
-  const result = buildJournalEvents({
+  const result = buildTradeTags({
     fills,
     windowsBySymbol,
     map: opts.map,
@@ -165,11 +165,11 @@ export async function runJournalImport(ctx: CliContext, opts: JournalImportOptio
         `Map broker symbols with --map, e.g. --map ESU6=ES`,
     );
   }
-  await writeJournalEvents(ctx.store, result.events);
+  await writeTradeTags(ctx.store, result.events);
 
   const c = result.counts;
   console.log(
-    `${pc.bold("journal imported")}  ${c.tagged}/${c.fills} fills tagged on ${result.symbols.join(", ")}`,
+    `${pc.bold("trades imported")}  ${c.tagged}/${c.fills} fills tagged on ${result.symbols.join(", ")}`,
   );
   console.log(
     `  days: ${c.tradedDays} traded · ${c.winDays} win · ${c.lossDays} loss` +
@@ -192,12 +192,12 @@ export async function runJournalImport(ctx: CliContext, opts: JournalImportOptio
   );
 }
 
-export function runJournalStatus(ctx: CliContext): void {
-  const journal = journalEventsIn(loadEventFiles(ctx.store.dataDir));
-  if (journal.length === 0) {
-    console.log("no journal imported yet");
-    console.log(pc.dim("  edgestats journal import --broker <id>     (env credentials)"));
-    console.log(pc.dim("  edgestats journal import --csv trades.csv  (broker statement)"));
+export function runTradesStatus(ctx: CliContext): void {
+  const tags = tradeTagsIn(loadEventFiles(ctx.store.dataDir));
+  if (tags.length === 0) {
+    console.log("no trades imported yet");
+    console.log(pc.dim("  edgestats trades import --broker <id>     (env credentials)"));
+    console.log(pc.dim("  edgestats trades import --csv fills.csv   (broker statement)"));
     console.log(
       pc.dim(
         "  brokers: " +
@@ -208,7 +208,7 @@ export function runJournalStatus(ctx: CliContext): void {
     );
     return;
   }
-  for (const ev of journal) {
+  for (const ev of tags) {
     printEvent(ev);
   }
   console.log(

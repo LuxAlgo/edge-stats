@@ -1,7 +1,7 @@
-# Journal: your own trades as query conditions
+# Trade tags: your own trades as query conditions
 
-`edgestats journal import` turns your executed trades into three journal
-event tags, stored as ordinary event files in your store:
+`edgestats trades import` turns your executed trades into three day
+tags, stored as ordinary event files in your store:
 
 - `TRADED`: trade dates with at least one imported fill
 - `TRADED_WIN`: trade dates whose realized P&L was positive
@@ -33,20 +33,20 @@ From a broker, read-only, through [`@luxalgo/broker-sdk`](https://github.com/Lux
 
 ```bash
 export KRAKEN_API_KEY=... KRAKEN_API_SECRET=...
-edgestats journal import --broker kraken
+edgestats trades import --broker kraken
 ```
 
 Credentials are read from environment variables named after the broker
 and its credential fields (`kraken` + `apiSecret` becomes
 `KRAKEN_API_SECRET`); a missing variable is reported by exact name along
-with the broker's read-only setup guide. `edgestats journal` lists the
+with the broker's read-only setup guide. `edgestats trades` lists the
 supported brokers. Keys are passed straight to the broker API call and
 never stored, logged, or sent anywhere else.
 
 From a broker statement export, no keys at all:
 
 ```bash
-edgestats journal import --csv statement.csv
+edgestats trades import --csv statement.csv
 ```
 
 The statement needs symbol, side, quantity, and price columns (fee and
@@ -63,7 +63,7 @@ Two options cover the usual normalization gaps:
   `--mult ES=50`. Multipliers only matter for the win/loss sign on days
   that mix symbols; within one symbol the sign is multiplier-invariant.
 
-Re-importing overwrites the previous journal tags. `edgestats journal`
+Re-importing overwrites the previous trade tags. `edgestats trades`
 shows what is currently imported.
 
 ## What the tags mean, exactly
@@ -80,7 +80,7 @@ shows what is currently imported.
   proportional fees, on the closing fill's trade date. Shorts work the
   same way in reverse. Positions that never close realize nothing, so an
   open-only day is `TRADED` but neither win nor loss.
-- **Honesty carries over.** Journal-conditioned queries go through the
+- **Honesty carries over.** Tag-conditioned queries go through the
   same engine as everything else: N and the Wilson 95% CI on every
   estimate, minimum-sample guards (your first weeks of trading WILL be
   refused as too small, which is the feature working), stability splits,
@@ -96,7 +96,7 @@ ever.
 
 ## For agents
 
-The MCP server's `edge_journal` tool reports which journal tags the
-store carries and how to use them; the queries themselves run through
+The MCP server's `edge_trades` tool reports which trade tags the store
+carries and how to use them; the queries themselves run through
 `edge_query` like any other. Agents cannot trigger an import: creating
-or refreshing journal tags is a CLI action by the user, on purpose.
+or refreshing trade tags is a CLI action by the user, on purpose.

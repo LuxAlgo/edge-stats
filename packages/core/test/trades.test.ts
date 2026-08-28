@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { SessionWindow } from "../src/calendar/types";
-import type { JournalFill } from "../src/journal";
-import { assignTradeDate, buildJournalEvents, realizedPnlByDay } from "../src/journal";
+import type { TradeFill } from "../src/trades";
+import { assignTradeDate, buildTradeTags, realizedPnlByDay } from "../src/trades";
 import { compileQuery } from "../src/query/compile";
 import { astToDsl } from "../src/query/normalize";
 import { parseDsl } from "../src/query/parser";
@@ -27,7 +27,7 @@ const ES_WINDOWS: SessionWindow[] = [
   win("2026-03-04", "2026-03-03T23:00:00Z", "2026-03-04T22:00:00Z"),
 ];
 
-const fill = (over: Partial<JournalFill>): JournalFill => ({
+const fill = (over: Partial<TradeFill>): TradeFill => ({
   symbol: "ES",
   side: "buy",
   quantity: 1,
@@ -35,7 +35,7 @@ const fill = (over: Partial<JournalFill>): JournalFill => ({
   ...over,
 });
 
-describe("journal day assignment (a fill belongs to the first session that ends after it)", () => {
+describe("trade-tag day assignment (a fill belongs to the first session that ends after it)", () => {
   it("puts a Sunday-evening overnight fill on Monday's trade date", () => {
     expect(assignTradeDate(ms("2026-03-01T23:30:00Z"), ES_WINDOWS)).toBe("2026-03-02");
   });
@@ -49,10 +49,10 @@ describe("journal day assignment (a fill belongs to the first session that ends 
   });
 });
 
-describe("journal realized P&L (signed FIFO, fee-adjusted, realized on the closing day)", () => {
+describe("trade-tag realized P&L (signed FIFO, fee-adjusted, realized on the closing day)", () => {
   const dated = (
-    over: Partial<JournalFill> & { executedAt: string },
-  ): JournalFill & { storeSymbol: string; tradeDate: string; tsMs: number } => {
+    over: Partial<TradeFill> & { executedAt: string },
+  ): TradeFill & { storeSymbol: string; tradeDate: string; tsMs: number } => {
     const f = fill(over);
     const tradeDate = assignTradeDate(ms(over.executedAt), ES_WINDOWS);
     if (tradeDate === null) throw new Error("fixture fill out of range");
@@ -133,9 +133,9 @@ describe("journal realized P&L (signed FIFO, fee-adjusted, realized on the closi
   });
 });
 
-describe("journal event files", () => {
+describe("trade-tag event files", () => {
   it("tags traded, win, and loss days and reports every skip honestly", () => {
-    const result = buildJournalEvents({
+    const result = buildTradeTags({
       fills: [
         // Day 1: a winning round trip.
         fill({ side: "buy", quantity: 1, price: 100, executedAt: "2026-03-02T10:00:00Z" }),
@@ -186,7 +186,7 @@ describe("journal event files", () => {
     expect(byName.get("TRADED_LOSS")?.dates).toEqual(["2026-03-03"]);
     for (const ev of result.events) {
       expect(ev.coverage).toEqual({ from: "2026-03-02", to: "2026-03-05" });
-      expect(ev.version).toBe("journal-2026-03-05");
+      expect(ev.version).toBe("trades-2026-03-05");
       expect(ev.sources).toEqual(["test fixture"]);
     }
   });
@@ -195,7 +195,7 @@ describe("journal event files", () => {
 describe("the eventOccurs outcome", () => {
   const ctx = { orWindows: [5, 15, 30, 60], ibWindow: 60 };
 
-  it("round-trips through the DSL with a journal condition", () => {
+  it("round-trips through the DSL with a trade-tag condition", () => {
     const dsl = "eventOccurs('TRADED_WIN') WHERE eventDay('TRADED')";
     const ast = parseDsl(dsl);
     expect(astToDsl(parseDsl(astToDsl(ast)))).toBe(astToDsl(ast));
