@@ -3,8 +3,8 @@
 </p>
 
 <p align="center">
-  Composable session statistics over your own market data.<br>
-  <code>P(outcome | conditions)</code>, with the sample size and confidence interval attached to every estimate.
+  Ask how often a trading setup actually worked, on your own market data.<br>
+  Every answer is one query, <code>P(outcome | conditions)</code>, with the sample size and confidence interval attached.
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@ Edge Stats is a [LuxAlgo](https://www.luxalgo.com) open source project. Official
 
 ---
 
-Edge Stats syncs intraday bars from your own data source into a local DuckDB store, derives session features once, and answers conditional-probability queries over them. Any outcome in the registry composes with any set of conditions, so the report catalog is a folder of preset queries rather than a fixed menu. It ships as a CLI, a local dashboard, and an MCP server; all three run the same engine and return the same result envelope.
+Edge Stats answers questions like: how often did a Tuesday gap fill, and how long did the fill take? It syncs intraday bars from your own data source into a local DuckDB store, derives session features once, and then runs any question you can compose as a query. Any outcome in the registry combines with any set of conditions, so the report catalog is simply a folder of preset queries. It ships as a CLI, a local dashboard, and an MCP server; all three run the same engine and return the same result envelope.
 
 ```
 $ edgestats query "gapFill WHERE dayOfWeek = Tue AND gapPct BETWEEN 0.05% AND 0.6%" --symbol DEMO_STK
@@ -124,28 +124,7 @@ Typical flow: `edge_freshness`, then `edge_fields`, then `edge_query`, then `edg
 
 A preset is one JSON file: an outcome, base conditions, parameters, and definition prose with citations into the [LuxAlgo Library](https://www.luxalgo.com/library/). The generated [catalog](docs/catalog.md) lists 42 presets across 11 categories (121 named variants), and anything the query language can express works without one. Adding a report is a pull request with one file.
 
-## Comparison with Edgeful
-
-<!-- comparison facts last verified 2026-08-25 via public search extracts; re-verify before major releases -->
-
-[Edgeful](https://edgeful.com) is the best-known commercial product in this category. The comparison is nominative and factual. Their figures come from public third-party reviews as of 2026-08 (daytradingz.com, bullishbears.com), not from their site, which this project does not ingest; treat their column as a snapshot and their website as the authority. Every Edge Stats claim is verifiable in this repository.
-
-|                             | Edgeful (as of 2026-08)                                         | Edge Stats                                                                           |
-| --------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Model                       | Hosted web platform; computation on their servers               | Local engine; your bars, your DuckDB file, your disk                                 |
-| Price                       | $49/mo (or $468/yr); algo and API tier at $299/mo; no free tier | MIT; you pay only your own data vendor                                               |
-| Reports                     | 150+ pre-built reports                                          | 42 presets (121 named variants), plus any query you can compose                      |
-| Filters                     | Per-report filter menus                                         | Every registry predicate composes with every outcome                                 |
-| What travels with a number  | Report percentages; methodology presentation is theirs to state | N, Wilson 95% CI, minimum-sample guards, stability splits, enforced                  |
-| History                     | 5+ years standard, 8 years top tier, per third-party reviews    | Your data source decides: full crypto history, CME futures depth, any CSV            |
-| Tickers                     | 3,000+ assets on their hosted list                              | Whatever your source serves; CSV covers the rest                                     |
-| Export                      | Not advertised in the public material we reviewed               | `edgestats export`: CSV or parquet of bars, sessions, events, or any query's matches |
-| Programmatic access         | API access included with the $299/mo tier                       | Local MCP server (8 tools) and a local HTTP API                                      |
-| Alerts                      | Screener and alerts across their main strategies                | Live Board: threshold and minimum-N alerts on any composed query, replayable         |
-| Calendars and futures rolls | Not documented in the public material we reviewed               | Versioned, cited, CI-checked calendars; roll days excluded from gap stats            |
-| License                     | Proprietary subscription                                        | MIT                                                                                  |
-
-[docs/coming-from-edgeful.md](docs/coming-from-edgeful.md) maps the classic session-statistics reports to their preset ids.
+Coming from a report site? [docs/coming-from-edgeful.md](docs/coming-from-edgeful.md) maps the classic session-statistics reports to their preset ids.
 
 ## Non-goals
 

@@ -92,6 +92,29 @@ fields — the same text `edge_reports_list` serves to agents.
 - **No hosted service.** There is no cloud, no account, and no tier. What
   you run is yours; the trade-off is that you run it.
 
+## How the products compare
+
+The comparison is nominative and factual. Edgeful's figures come from
+public third-party reviews as of 2026-08 (daytradingz.com,
+bullishbears.com), not from their site, which this project does not
+ingest; treat their column as a snapshot and their website as the
+authority. Every Edge Stats claim is verifiable in this repository.
+
+|                             | Edgeful (as of 2026-08)                                         | Edge Stats                                                                           |
+| --------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Model                       | Hosted web platform; computation on their servers               | Local engine; your bars, your DuckDB file, your disk                                 |
+| Price                       | $49/mo (or $468/yr); algo and API tier at $299/mo; no free tier | MIT; you pay only your own data vendor                                               |
+| Reports                     | 150+ pre-built reports                                          | 42 presets (121 named variants), plus any query you can compose                      |
+| Filters                     | Per-report filter menus                                         | Every registry predicate composes with every outcome                                 |
+| What travels with a number  | Report percentages; methodology presentation is theirs to state | N, Wilson 95% CI, minimum-sample guards, stability splits, enforced                  |
+| History                     | 5+ years standard, 8 years top tier, per third-party reviews    | Your data source decides: full crypto history, CME futures depth, any CSV            |
+| Tickers                     | 3,000+ assets on their hosted list                              | Whatever your source serves; CSV covers the rest                                     |
+| Export                      | Not advertised in the public material we reviewed               | `edgestats export`: CSV or parquet of bars, sessions, events, or any query's matches |
+| Programmatic access         | API access included with the $299/mo tier                       | Local MCP server (8 tools) and a local HTTP API                                      |
+| Alerts                      | Screener and alerts across their main strategies                | Live Board: threshold and minimum-N alerts on any composed query, replayable         |
+| Calendars and futures rolls | Not documented in the public material we reviewed               | Versioned, cited, CI-checked calendars; roll days excluded from gap stats            |
+| License                     | Proprietary subscription                                        | MIT                                                                                  |
+
 ## The 60-second demo — zero keys, zero cost
 
 ```bash
