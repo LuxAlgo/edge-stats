@@ -9,15 +9,18 @@ import { api } from "../lib/api";
 import { requestDslFocus, useCachedAsync } from "../lib/hooks";
 import { cn } from "../lib/utils";
 
-/** Original mark: three ascending bars, the last one carrying its interval whisker. */
+/*
+  The LuxAlgo mark. The name and logo are LuxAlgo trademarks and are not
+  covered by the MIT license: see TRADEMARKS.md before reusing them in a
+  fork or derivative.
+*/
 function Mark() {
   return (
-    <svg viewBox="0 0 22 22" className="h-[18px] w-[18px]" aria-hidden="true">
-      <rect x="2" y="13" width="4" height="7" rx="1" fill="var(--faint)" />
-      <rect x="9" y="9" width="4" height="11" rx="1" fill="var(--muted-foreground)" />
-      <rect x="16" y="5" width="4" height="15" rx="1" fill="var(--chart-1)" />
-      <rect x="17.5" y="2" width="1" height="6" fill="var(--foreground)" />
-      <rect x="16" y="2" width="4" height="1" fill="var(--foreground)" />
+    <svg viewBox="0 0 41 37" className="h-4 w-auto text-foreground" aria-hidden="true">
+      <g fill="currentColor">
+        <path d="M36.217 34.646l4.139-7.231L25.868 2.108 11.381 27.415h8.279l6.209-10.845z" />
+        <path d="M31.042 29.224 8.267 29.22 24.833.3h-8.277L0 29.216l4.137 7.237h31.045z" />
+      </g>
     </svg>
   );
 }
