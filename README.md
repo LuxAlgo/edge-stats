@@ -103,22 +103,36 @@ Edge Stats computes on data you already have or license. Every adapter normalize
 
 The `csv` adapter covers anything not listed: if your source can export a file, Edge Stats can compute on it. A daily [adapter-canaries](.github/workflows/adapter-canaries.yml) workflow pulls a small sample from each vendor and fails on schema drift.
 
+## Journal
+
+Import your own executed trades (read-only, through [broker-sdk](https://github.com/LuxAlgo/broker-sdk) or a statement CSV) and every query can condition on your real participation:
+
+```bash
+edgestats journal import --broker kraken        # or: --csv statement.csv
+edgestats query "eventOccurs('TRADED_WIN') WHERE eventDay('TRADED') AND prevNr7" --symbol ES
+```
+
+That second line is your realized day-win rate on NR7 sessions, with its N and 95% CI, next to which the unconditioned rate is one query away. Setup base rates and your own execution finally share an envelope. Details, conventions, and the exact win/loss definition: [docs/journal.md](docs/journal.md).
+
 ## MCP
 
-`@luxalgo/edge-stats-mcp` (stdio and streamable HTTP) exposes the engine to agents through eight read-only tools:
+`@luxalgo/edge-stats-mcp` (stdio and streamable HTTP) exposes the engine to agents through nine read-only tools:
 
-| Tool                | Returns                                                             |
-| ------------------- | ------------------------------------------------------------------- |
-| `edge_freshness`    | Configured symbols, last bar per symbol, calendar versions          |
-| `edge_fields`       | The registry: every outcome, predicate, and field, with definitions |
-| `edge_query`        | Any composed P(outcome given conditions), in the full envelope      |
-| `edge_report`       | A preset from the catalog, with parameters                          |
-| `edge_reports_list` | The catalog, with parameter specs                                   |
-| `edge_sessions`     | The historical sessions behind a result                             |
-| `edge_live`         | Live Board state: forming, active, and resolved setups              |
-| `edge_export`       | CSV or parquet written locally, path returned                       |
+| Tool                | Returns                                                                 |
+| ------------------- | ----------------------------------------------------------------------- |
+| `edge_freshness`    | Configured symbols, last bar per symbol, calendar versions              |
+| `edge_fields`       | The registry: every outcome, predicate, and field, with definitions     |
+| `edge_query`        | Any composed P(outcome given conditions), in the full envelope          |
+| `edge_report`       | A preset from the catalog, with parameters                              |
+| `edge_reports_list` | The catalog, with parameter specs                                       |
+| `edge_sessions`     | The historical sessions behind a result                                 |
+| `edge_live`         | Live Board state: forming, active, and resolved setups                  |
+| `edge_journal`      | Which journal tags your imported trades produced, and how to query them |
+| `edge_export`       | CSV or parquet written locally, path returned                           |
 
 Typical flow: `edge_freshness`, then `edge_fields`, then `edge_query`, then `edge_sessions` for the underlying sessions.
+
+This local server exists because your store lives on your disk, where no hosted service can reach. Hosted access to the same engine over LuxAlgo-maintained data, inside the main [LuxAlgo MCP](https://www.luxalgo.com), is planned; the tool shapes are the same.
 
 ## Presets
 
@@ -128,7 +142,7 @@ Coming from a report site? [docs/coming-from-edgeful.md](docs/coming-from-edgefu
 
 ## Non-goals
 
-- No order execution and no broker connections.
+- No order execution, ever. The optional journal import uses read-only broker access to read your own trade history; nothing here can place, modify, or cancel an order.
 - No tick streaming; session statistics need bars.
 - No hosted service, no telemetry, no accounts.
 - No scraping of any other product's site or app. The statistics here are generic, well-known trading math, implemented independently from public definitions.

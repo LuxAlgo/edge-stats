@@ -207,19 +207,48 @@ interface ErrorPayload {
 }
 
 describe("the edge_* tool surface over a real MCP client", () => {
-  it("serves exactly the eight edge_* tools", async () => {
+  it("serves exactly the nine edge_* tools", async () => {
     const listed = await client.listTools();
-    expect(listed.tools).toHaveLength(8);
+    expect(listed.tools).toHaveLength(9);
     expect(listed.tools.map((t) => t.name).sort()).toEqual([
       "edge_export",
       "edge_fields",
       "edge_freshness",
+      "edge_journal",
       "edge_live",
       "edge_query",
       "edge_report",
       "edge_reports_list",
       "edge_sessions",
     ]);
+  });
+
+  it("edge_journal says when no trades are imported, then serves the tags once they are", async () => {
+    const before = await call<{ imported: boolean; note?: string }>("edge_journal");
+    expect(before.isError).toBe(false);
+    expect(before.payload.imported).toBe(false);
+    expect(before.payload.note).toContain("edgestats journal import");
+
+    writeFileSync(
+      join(dataDir, "events", "journal-traded.json"),
+      JSON.stringify({
+        event: "TRADED",
+        version: "journal-2026-03-05",
+        sources: ["test fixture"],
+        coverage: { from: "2026-03-02", to: "2026-03-05" },
+        dates: ["2026-03-02", "2026-03-03"],
+      }),
+    );
+    const after = await call<{
+      imported: boolean;
+      events: { event: string; days: number }[];
+      use: { example: string };
+    }>("edge_journal");
+    expect(after.isError).toBe(false);
+    expect(after.payload.imported).toBe(true);
+    expect(after.payload.events).toEqual([expect.objectContaining({ event: "TRADED", days: 2 })]);
+    expect(after.payload.use.example).toContain("eventOccurs('TRADED_WIN')");
+    rmSync(join(dataDir, "events", "journal-traded.json"));
   });
 
   it("edge_query answers with the honest envelope: N, CI, and the normalized query", async () => {

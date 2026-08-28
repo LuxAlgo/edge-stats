@@ -69,7 +69,7 @@ fields — the same text `edge_reports_list` serves to agents.
   predicates on **every** outcome — not a separate report family. Drop
   your own event file in (earnings, expiries, journal tags) and it works
   identically.
-- **MCP for agents.** A free local MCP server exposes eight tools —
+- **MCP for agents.** A free local MCP server exposes nine tools —
   registry, query, sessions, presets, freshness, export, live — so your
   agents can answer "what actually happens after a down gap on CPI day?"
   with receipts.

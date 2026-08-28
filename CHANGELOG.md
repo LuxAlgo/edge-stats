@@ -4,6 +4,23 @@ All notable changes to Edge Stats are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 uses [semantic versioning](https://semver.org/).
 
+## Unreleased
+
+### Added
+
+- Journal: `edgestats journal import` turns your own executed trades
+  (read-only via `@luxalgo/broker-sdk`, or a broker statement CSV) into
+  TRADED / TRADED_WIN / TRADED_LOSS event tags, day-assigned with the
+  store's session calendars and classified by signed FIFO realized P&L.
+- `eventOccurs(event)` outcome: any event calendar (macro or journal) as
+  a rate under arbitrary conditions.
+- `edge_journal` MCP tool reporting the store's journal tags.
+
+### Changed
+
+- Dashboard restyled onto the LuxAlgo data-canvas design system (Geist,
+  black canvas, one validated chart hue, prism accent).
+
 ## 0.1.0 - 2026-08-26
 
 Initial public release.

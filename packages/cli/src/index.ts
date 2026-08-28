@@ -25,6 +25,7 @@ import {
 import { openContext } from "./context";
 import { runInit } from "./commands/init";
 import { runBench } from "./commands/bench";
+import { runJournalImport, runJournalStatus } from "./commands/journal";
 import { runLiveAlerts, runLiveOnce, runLiveReplay, runLiveWatch } from "./commands/live";
 import { startServer } from "./commands/serve";
 import { fail, pct, renderResult } from "./render";
@@ -53,6 +54,16 @@ function parseParams(pairs: string[]): Record<string, number | string> {
     out[key] = Number.isFinite(num) && raw.trim() !== "" ? num : raw;
   }
   return out;
+}
+
+function collectPairs(value: string, previous: string[]): string[] {
+  return [...previous, value];
+}
+
+function splitPair(pair: string): [string, string] {
+  const idx = pair.indexOf("=");
+  if (idx === -1) fail(`expected KEY=VALUE, got '${pair}'`);
+  return [pair.slice(0, idx), pair.slice(idx + 1)];
 }
 
 function handleError(err: unknown, dsl?: string): never {
@@ -233,6 +244,62 @@ program
       console.log(`${pc.bold(a.id.padEnd(12))} ${a.title}`);
       console.log(pc.dim(`  ${a.doc.split("\n")[0]}`));
       if (a.requiresEnv.length > 0) console.log(pc.dim(`  env: ${a.requiresEnv.join(", ")}`));
+    }
+  });
+
+const journal = program
+  .command("journal")
+  .description("tag sessions with your own imported trades (TRADED, TRADED_WIN, TRADED_LOSS)");
+
+journal
+  .command("import")
+  .description("import fills from a broker (read-only, env credentials) or a statement CSV")
+  .option("--broker <id>", "broker id from @luxalgo/broker-sdk (see `edgestats journal`)")
+  .option("--csv <path>", "broker statement CSV with symbol/side/quantity/price columns")
+  .option(
+    "--map <FROM=TO...>",
+    "map broker symbols to store symbols (e.g. ESU6=ES)",
+    collectPairs,
+    [],
+  )
+  .option(
+    "--mult <SYM=N...>",
+    "contract multiplier per store symbol (e.g. ES=50)",
+    collectPairs,
+    [],
+  )
+  .action(async (opts: { broker?: string; csv?: string; map: string[]; mult: string[] }) => {
+    const ctx = await openContext(dirOpt());
+    try {
+      const map: Record<string, string> = {};
+      for (const [k, v] of opts.map.map(splitPair)) map[k] = v;
+      const multipliers: Record<string, number> = {};
+      for (const [k, v] of opts.mult.map(splitPair)) {
+        const n = Number(v);
+        if (!Number.isFinite(n) || n <= 0)
+          fail(`--mult wants SYM=positive-number, got '${k}=${v}'`);
+        multipliers[k] = n;
+      }
+      const importOpts: Parameters<typeof runJournalImport>[1] = { map, multipliers };
+      if (opts.broker !== undefined) importOpts.broker = opts.broker;
+      if (opts.csv !== undefined) importOpts.csv = opts.csv;
+      await runJournalImport(ctx, importOpts);
+    } catch (err) {
+      handleError(err);
+    } finally {
+      await ctx.store.close();
+    }
+  });
+
+journal
+  .command("status", { isDefault: true })
+  .description("show the journal tags currently in the store")
+  .action(async () => {
+    const ctx = await openContext(dirOpt());
+    try {
+      runJournalStatus(ctx);
+    } finally {
+      await ctx.store.close();
     }
   });
 

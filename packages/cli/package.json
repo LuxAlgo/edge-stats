@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.1.1",
+    "@luxalgo/broker-sdk": "^0.3.0",
     "@luxalgo/edge-stats": "workspace:*",
     "commander": "^15.0.0",
     "hono": "^4.13.4",

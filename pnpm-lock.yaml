@@ -38,6 +38,9 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.1
         version: 2.1.1(hono@4.13.4)
+      '@luxalgo/broker-sdk':
+        specifier: ^0.3.0
+        version: 0.3.0
       '@luxalgo/edge-stats':
         specifier: workspace:*
         version: link:../core
@@ -422,6 +425,10 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@luxalgo/broker-sdk@0.3.0':
+    resolution: {integrity: sha512-GuqYiENa5EyKwG2mpS+G4JcB8cDceJuSMSLcHybOl2We3h3MWDL9XPjh4mIBDrtvnMFZ/dd4YCvJNCxcSYP4Zw==}
+    engines: {node: '>=18.17'}
 
   '@modelcontextprotocol/sdk@1.30.0':
     resolution: {integrity: sha512-xKd8OIzlqNzcqcNumGAa6g+PW2kjD5vrpcKOnfldAUPP3j7lnqMPwlTXQm8gF+UwH72z0lqaRbjr9hqGz0eITA==}
@@ -1953,6 +1960,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
+
+  '@luxalgo/broker-sdk@0.3.0': {}
 
   '@modelcontextprotocol/sdk@1.30.0(zod@4.4.3)':
     dependencies:

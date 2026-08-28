@@ -1,4 +1,4 @@
-import { sqlNum } from "../util/sql";
+import { sqlNum, sqlStr } from "../util/sql";
 import { fields } from "./fields";
 import type { OutcomeDef } from "./types";
 import { QueryError, requireWindow } from "./types";
@@ -358,5 +358,26 @@ export const outcomes: OutcomeDef[] = [
       doc: "Distribution of the field itself across eligible sessions.",
     },
     examples: ["hit(retOcPct, gte, 0.5) WHERE gapUp", "hit(rangeVsAtr, gte, 1.5) WHERE nr7"],
+  },
+  {
+    kind: "outcome",
+    name: "eventOccurs",
+    title: "Event occurs on the session",
+    doc: "How often the session's trade date appears in the named events calendar. Every session is eligible, so this is the event's frequency under your conditions. Built for journal tags (TRADED, TRADED_WIN, TRADED_LOSS from `edgestats journal import`): eventOccurs('TRADED_WIN') WHERE <setup> is your realized day-win rate on that setup, comparable against the same query unconditioned.",
+    args: [
+      {
+        name: "event",
+        type: "string",
+        required: true,
+        doc: "Event name as listed in the events data (macro calendars or journal tags)",
+      },
+    ],
+    eligibility: () => "TRUE",
+    success: (a) =>
+      `EXISTS (SELECT 1 FROM events e WHERE e.date = f.trade_date AND e.event = ${sqlStr(String(a.event))})`,
+    examples: [
+      "eventOccurs('TRADED_WIN') WHERE eventDay('TRADED')",
+      "eventOccurs('TRADED') WHERE eventDay('FOMC')",
+    ],
   },
 ];
