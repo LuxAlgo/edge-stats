@@ -1,6 +1,6 @@
 {
   "event": "CPI",
-  "version": "2026-08.1",
+  "version": "2026-08.2",
   "sources": [
     "https://www.bls.gov/schedule/news_release/cpi.htm",
     "https://www.bls.gov/bls/news-release/cpi.htm",
@@ -21,10 +21,10 @@
     "https://www.bls.gov/news.release/archives/cpi_07142026.htm",
     "Cross-checked against two independent compilations of the BLS schedule: https://github.com/nthoang84/cpi-releases (scrape of bls.gov/schedule/YYYY pages) and the ForexFactory calendar mirror in https://github.com/LHKaay/ForexPrediction (2015-2021); the two agree on every overlapping date."
   ],
-  "notes": "One date per monthly CPI news release (8:30 a.m. ET), as published by the BLS release schedule; archive filenames (cpi_MMDDYYYY) encode the actual release day. 2025 has 11 dates: the September 2025 release was rescheduled to 2025-10-24 and the October 2025 CPI was never published (2025 lapse in appropriations); the 2025-12-18 release covered November. Coverage ends 2026-09-11 — the last release BLS's published schedule confirms that we could verify; later 2026 dates exist on the BLS schedule but were not independently verifiable from this build environment, so they are omitted rather than guessed. Verified 2026-08-25 via search extracts of official BLS pages (direct fetch of bls.gov was unavailable); dates after 2026-08-25 are scheduled, not yet released.",
+  "notes": "One date per monthly CPI news release (8:30 a.m. ET), as published by the BLS release schedule; archive filenames (cpi_MMDDYYYY) encode the actual release day. 2025 has 11 dates: the September 2025 release was rescheduled to 2025-10-24 and the October 2025 CPI was never published (2025 lapse in appropriations); the 2025-12-18 release covered November. Coverage ends 2026-09-11 \u2014 the last release BLS's published schedule confirms that we could verify; later 2026 dates exist on the BLS schedule but were not independently verifiable from this build environment, so they are omitted rather than guessed. Verified 2026-08-25 via search extracts of official BLS pages (direct fetch of bls.gov was unavailable); dates after 2026-08-25 are scheduled, not yet released. Extended 2026-08-28 with the remaining 2026 releases (2026-10-14, 2026-11-10, 2026-12-10) from the official BLS schedule as carried by public release calendars (financecalendar.com, econ-calendar.com, marketclock.net), cross-checked against the officially announced 2026-09-11 release; 2027 dates are intentionally excluded until BLS publishes its 2027 schedule.",
   "coverage": {
     "from": "2015-01-01",
-    "to": "2026-09-11"
+    "to": "2026-12-10"
   },
   "dates": [
     "2015-01-16",
@@ -166,6 +166,9 @@
     "2026-06-10",
     "2026-07-14",
     "2026-08-12",
-    "2026-09-11"
+    "2026-09-11",
+    "2026-10-14",
+    "2026-11-10",
+    "2026-12-10"
   ]
 }

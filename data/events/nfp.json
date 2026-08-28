@@ -1,6 +1,6 @@
 {
   "event": "NFP",
-  "version": "2026-08.1",
+  "version": "2026-08.2",
   "sources": [
     "https://www.bls.gov/schedule/news_release/empsit.htm",
     "https://www.bls.gov/bls/news-release/empsit.htm",
@@ -28,10 +28,10 @@
     "https://www.bls.gov/news.release/archives/empsit_07022026.htm",
     "Cross-checked against three independent compilations: the ForexFactory calendar mirror in https://github.com/LHKaay/ForexPrediction (2015-2021), https://github.com/sahilk873/macro-expectations-engine (2020-2025), and the Bloomberg-derived calendar in https://github.com/MertYakar66/smart-wheel-engine (2025-2026); all agree on every overlapping date."
   ],
-  "notes": "One date per Employment Situation (nonfarm payrolls) news release (8:30 a.m. ET), as published by the BLS release schedule; archive filenames (empsit_MMDDYYYY) encode the actual release day. Usually the first Friday of the month, but never assumed: irregular dates (e.g. 2017-03-10, 2017-12-08, 2021-10-08, 2023-03-10, 2026-02-11) were verified individually. 2025 has 11 dates: no release on the first Fridays of October or November (2025 lapse in appropriations); September data was released 2025-11-20 and October+November data together on 2025-12-16 — one release date. Coverage ends 2026-09-04 — the last release BLS's published schedule confirms that we could verify; later 2026 dates exist on the BLS schedule but were not independently verifiable from this build environment, so they are omitted rather than guessed. Verified 2026-08-25 via search extracts of official BLS pages (direct fetch of bls.gov was unavailable); dates after 2026-08-25 are scheduled, not yet released.",
+  "notes": "One date per Employment Situation (nonfarm payrolls) news release (8:30 a.m. ET), as published by the BLS release schedule; archive filenames (empsit_MMDDYYYY) encode the actual release day. Usually the first Friday of the month, but never assumed: irregular dates (e.g. 2017-03-10, 2017-12-08, 2021-10-08, 2023-03-10, 2026-02-11) were verified individually. 2025 has 11 dates: no release on the first Fridays of October or November (2025 lapse in appropriations); September data was released 2025-11-20 and October+November data together on 2025-12-16 \u2014 one release date. Coverage ends 2026-09-04 \u2014 the last release BLS's published schedule confirms that we could verify; later 2026 dates exist on the BLS schedule but were not independently verifiable from this build environment, so they are omitted rather than guessed. Verified 2026-08-25 via search extracts of official BLS pages (direct fetch of bls.gov was unavailable); dates after 2026-08-25 are scheduled, not yet released. Extended 2026-08-28 with the remaining 2026 releases (2026-10-02, 2026-11-06, 2026-12-04) from the official BLS schedule as carried by public release calendars and the CY2026 Principal Federal Economic Indicators schedule, cross-checked against the officially announced 2026-09-04 release; 2027 dates are intentionally excluded until BLS publishes its 2027 schedule.",
   "coverage": {
     "from": "2015-01-01",
-    "to": "2026-09-04"
+    "to": "2026-12-04"
   },
   "dates": [
     "2015-01-09",
@@ -173,6 +173,9 @@
     "2026-06-05",
     "2026-07-02",
     "2026-08-07",
-    "2026-09-04"
+    "2026-09-04",
+    "2026-10-02",
+    "2026-11-06",
+    "2026-12-04"
   ]
 }

@@ -4,7 +4,7 @@
   Scans data/holidays/*.json and data/events/*.json — any set of files; new
   calendars are picked up automatically — prints each file's declared
   coverage horizon (`coverage.to`) and the days remaining from today, and
-  exits 1 when a horizon is within --min-days (default 120) or already
+  exits 1 when a horizon is within --min-days (default 45) or already
   past, naming the file and how to extend it:
 
   - data/holidays/*: regenerate with a wider year range via
@@ -40,7 +40,17 @@ const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DATA_DIRS = ["data/holidays", "data/events"];
 const DAY_MS = 86_400_000;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const DEFAULT_MIN_DAYS = 120;
+/*
+  45, not 120: BLS and the Fed publish exact dates on rolling schedules,
+  and each year's full calendar lands in the prior autumn. A 120-day
+  window is guaranteed to false-alarm every late summer, when the
+  verified horizon (the published remainder of the current year) sits
+  90-120 days out. 45 days still leaves weeks to run the documented
+  extension procedure in data/events/README.md, and every monthly BLS
+  release announces the next one, so the horizon never collapses
+  silently.
+*/
+const DEFAULT_MIN_DAYS = 45;
 
 function parseArgs(argv) {
   let minDays = DEFAULT_MIN_DAYS;
