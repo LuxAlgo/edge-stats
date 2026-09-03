@@ -13,6 +13,7 @@ import type {
   QueryRequest,
   QueryResult,
   RegistryEntryDescription,
+  SessionBarsResult,
   SessionDetail,
   SymbolConfig,
 } from "@luxalgo/edge-stats";
@@ -31,8 +32,14 @@ export type {
   QueryResult,
   RecencyView,
   RegistryEntryDescription,
+  SessionBar,
+  SessionBarsResult,
+  SessionContext,
   SessionDetail,
+  SessionLevels,
+  SessionOpeningRange,
   SessionRef,
+  SessionTimes,
   StabilitySplit,
   SymbolConfig,
 } from "@luxalgo/edge-stats";
@@ -129,4 +136,12 @@ export const api = {
     post<PresetRunResult>("/api/preset", body, signal),
   sessions: (ids: string[], signal?: AbortSignal) =>
     post<{ sessions: SessionDetail[] }>("/api/sessions", { ids }, signal),
+  /** One session's bars and derived levels for the session view; `context` = pre-session bars (0-240). */
+  sessionBars: (sessionId: string, opts?: { context?: number }, signal?: AbortSignal) => {
+    const q = opts?.context === undefined ? "" : `?context=${opts.context}`;
+    return get<SessionBarsResult>(
+      `/api/sessions/${encodeURIComponent(sessionId)}/bars${q}`,
+      signal,
+    );
+  },
 };

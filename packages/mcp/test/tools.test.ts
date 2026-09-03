@@ -188,6 +188,17 @@ interface FreshnessPayload {
   storeFingerprint: string;
 }
 
+interface SessionBarsPayload {
+  sessionId: string;
+  tf: string;
+  startTs: number;
+  endTs: number;
+  bars: { ts: number; open: number; high: number; low: number; close: number }[];
+  context: { kind: string; bars: { ts: number }[] };
+  levels: { gapDir: string | null; prevClose: number | null; openingRanges: { window: number }[] };
+  disclaimer: string;
+}
+
 interface ExportPayload {
   rows: number;
   path: string;
@@ -207,9 +218,9 @@ interface ErrorPayload {
 }
 
 describe("the edge_* tool surface over a real MCP client", () => {
-  it("serves exactly the nine edge_* tools", async () => {
+  it("serves exactly the ten edge_* tools", async () => {
     const listed = await client.listTools();
-    expect(listed.tools).toHaveLength(9);
+    expect(listed.tools).toHaveLength(10);
     expect(listed.tools.map((t) => t.name).sort()).toEqual([
       "edge_export",
       "edge_fields",
@@ -218,6 +229,7 @@ describe("the edge_* tool surface over a real MCP client", () => {
       "edge_query",
       "edge_report",
       "edge_reports_list",
+      "edge_session_bars",
       "edge_sessions",
       "edge_trades",
     ]);
@@ -354,6 +366,38 @@ describe("the edge_* tool surface over a real MCP client", () => {
     expect(details.payload.sessions).toHaveLength(4);
     expect(details.payload.sessions.map((s) => s.sessionId).sort()).toEqual([...ids].sort());
     expect(details.payload.sessions[0]?.features.symbol).toBe("FIX_STK");
+  });
+
+  it("edge_session_bars returns one session's bars with the levels behind the statistic", async () => {
+    const query = await call<Envelope>("edge_query", {
+      dsl: "gapFill WHERE gapDir = down",
+      symbol: "FIX_STK",
+    });
+    const ref = query.payload.sessions.find((s) => s.tradeDate === "2024-01-11");
+    expect(ref).toBeDefined();
+
+    const view = await call<SessionBarsPayload>("edge_session_bars", {
+      sessionId: ref!.sessionId,
+      contextBars: 2,
+    });
+    expect(view.isError).toBe(false);
+    expect(view.payload.sessionId).toBe("FIX_STK|rth|2024-01-11");
+    expect(view.payload.tf).toBe("1h");
+    expect(view.payload.bars).toHaveLength(7); // hourly RTH: 09:30 … 15:30
+    expect(view.payload.bars.every((b) => b.ts >= view.payload.startTs)).toBe(true);
+    expect(view.payload.bars.every((b) => b.ts < view.payload.endTs)).toBe(true);
+    expect(view.payload.context.bars).toHaveLength(2);
+    expect(view.payload.context.kind).toBe("prior-session");
+    expect(view.payload.levels.gapDir).toBe("down");
+    expect(typeof view.payload.levels.prevClose).toBe("number");
+    expect(view.payload.levels.openingRanges.map((o) => o.window)).toEqual([60]);
+    expect(view.payload.disclaimer).toContain("Not predictions");
+
+    const unknown = await call<ErrorPayload>("edge_session_bars", {
+      sessionId: "FIX_STK|rth|1999-01-01",
+    });
+    expect(unknown.isError).toBe(true);
+    expect(unknown.payload.error).toMatch(/unknown session/);
   });
 
   it("edge_freshness lists the configured symbols with last-bar timestamps and store receipts", async () => {

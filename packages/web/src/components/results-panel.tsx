@@ -4,15 +4,16 @@
   stability split, recency, per-year counts, the verbatim disclaimer)
   appears identically on every page.
 */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChartCandlestick } from "lucide-react";
 import type { QueryResult, SessionDetail } from "../lib/api";
 import { api } from "../lib/api";
 import { useAsync } from "../lib/hooks";
 import { fmtInt, fmtNum, fmtValue } from "../lib/format";
 import { CiBar, PercentileStrip, YearBars } from "./charts";
 import { Estimate, EstimateInline } from "./estimate";
+import { SessionView } from "./session-view";
 import {
   Badge,
   Button,
@@ -296,14 +297,28 @@ function FeatureRow({ name, value }: { name: string; value: unknown }) {
 function SessionsBlock({
   result,
   onOpenSession,
+  onOpenChart,
 }: {
   result: QueryResult;
   onOpenSession: (id: string) => void;
+  onOpenChart: (id: string) => void;
 }) {
   const unit = result.distribution?.unit ?? "";
+  const latest = result.sessions[0];
   return (
     <PanelBlock
       label={`matching sessions · most recent ${fmtInt(result.sessions.length)} of ${fmtInt(result.n)}`}
+      aside={
+        latest ? (
+          <Button
+            onClick={() => onOpenChart(latest.sessionId)}
+            title="Open the most recent matched session's bars on a chart, with the query's levels"
+          >
+            <ChartCandlestick className="size-3.5" aria-hidden="true" />
+            Session view
+          </Button>
+        ) : undefined
+      }
     >
       {result.sessions.length === 0 ? (
         <p className="text-sm text-muted-foreground">No matching sessions to list.</p>
@@ -315,6 +330,7 @@ function SessionsBlock({
                 <th className={tableHeadClass}>Trade date</th>
                 <th className={tableHeadClass}>Outcome</th>
                 <th className={tableHeadClass}>Value{unit ? ` (${unit})` : ""}</th>
+                <th className={tableHeadClass} aria-label="chart" />
                 <th className={`${tableHeadClass} pr-0`} aria-label="details" />
               </tr>
             </thead>
@@ -338,6 +354,22 @@ function SessionsBlock({
                   </td>
                   <td className="py-2.5 pr-3">
                     <SessionValue value={s.value} unit={unit} />
+                  </td>
+                  <td className="py-2.5 pr-3 text-right">
+                    <button
+                      type="button"
+                      title="Open this session's bars on a chart, with the query's levels"
+                      aria-label={`Session view for ${s.tradeDate}`}
+                      className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[11px] text-faint transition-colors duration-150 hover:bg-white/[0.04] hover:text-foreground"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onOpenChart(s.sessionId);
+                      }}
+                      onKeyDown={(e) => e.stopPropagation()}
+                    >
+                      <ChartCandlestick className="size-3" aria-hidden="true" />
+                      chart
+                    </button>
                   </td>
                   <td className="py-2.5 text-right">
                     <span className="inline-flex items-center gap-1 font-mono text-[11px] text-faint transition-colors duration-150 group-hover:text-foreground">
@@ -390,6 +422,9 @@ export function ResultsPanel({
   // withholds every aggregate view too: counts and raw sessions only. A
   // "N too small" headline next to a 100% stability half would be a leak.
   const withheld = result.guards.refused && result.estimate === null;
+  // The session view (one session's bars on a chart) is panel-local state:
+  // it opens from here and from each session row, and nothing else moves.
+  const [chartSession, setChartSession] = useState<string | null>(null);
   return (
     <div className="space-y-4">
       <Panel accent="prism" className="p-5">
@@ -459,10 +494,18 @@ export function ResultsPanel({
       )}
 
       {withheld ? null : <GroupsBlock result={result} groupBy={groupBy} />}
-      <SessionsBlock result={result} onOpenSession={onOpenSession} />
+      <SessionsBlock result={result} onOpenSession={onOpenSession} onOpenChart={setChartSession} />
       <EnvelopeFooter result={result} />
       {openSession !== null ? (
         <SessionDrawer sessionId={openSession} onClose={onCloseSession} />
+      ) : null}
+      {chartSession !== null ? (
+        <SessionView
+          result={result}
+          sessionId={chartSession}
+          onNavigate={setChartSession}
+          onClose={() => setChartSession(null)}
+        />
       ) : null}
     </div>
   );

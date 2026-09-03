@@ -6,7 +6,8 @@
   envelope makes that visible.
 
   Tool flow the descriptions teach: edge_freshness first (symbols,
-  staleness); edge_fields → edge_query → edge_sessions (receipts).
+  staleness); edge_fields → edge_query → edge_sessions (receipts) →
+  edge_session_bars (the bars behind one of them).
   Presets: edge_reports_list → edge_report. Out the side: edge_export
   (files on the user's own disk) and edge_live (the Live Board seam).
 */
@@ -18,12 +19,14 @@ import type { ExportFormat } from "@luxalgo/edge-stats";
 import {
   DslSyntaxError,
   QueryError,
+  SESSION_BARS_MAX_CONTEXT,
   defaultSessionKey,
   describeRegistry,
   exportQuery,
   exportTable,
   findSymbol,
   freshness,
+  getSessionBars,
   getSessions,
   libraryUrl,
   loadEventFiles,
@@ -189,6 +192,45 @@ export function registerEdgeTools(server: McpServer): void {
       try {
         const ctx = await getContext();
         return json({ sessions: await getSessions(ctx.store, args.ids) });
+      } catch (err) {
+        return toolError(err);
+      }
+    },
+  );
+
+  server.registerTool(
+    "edge_session_bars",
+    {
+      title: "The bars behind one session, with its levels",
+      description:
+        "The session view: the actual bars of ONE session at the store's base timeframe (1m by default), plus the levels the engine derived for it — prior session high/low/close, session open/high/low/close, gap size and direction, every opening-range window's high/low and first break, and the minutes-from-open at which the gap filled, the prior high/low was touched, and the session high/low printed. " +
+        "Use it to check a statistic against what a matched session really looked like: run edge_query or edge_report, take a `sessions[].sessionId`, and read the bars around the level in question. A small pre-session context (the prior session's tail, or pre-market bars when the store has them) is returned separately under `context` and is not part of the session. " +
+        "Cost is independent of history size — the read touches only the session's own (symbol, timeframe, year) partition — but it is one session per call, capped at 36 hours and 5,000 bars. Bars are the user's own stored data, not a feed; the disclaimer applies.",
+      inputSchema: {
+        sessionId: z
+          .string()
+          .describe(
+            "A session id from edge_query / edge_report `sessions[].sessionId`, e.g. 'DEMO_STK|rth|2024-12-27'",
+          ),
+        contextBars: z
+          .number()
+          .int()
+          .min(0)
+          .max(SESSION_BARS_MAX_CONTEXT)
+          .optional()
+          .describe(
+            `Pre-session context bars to include before the open (default 30, max ${SESSION_BARS_MAX_CONTEXT}, 0 for none)`,
+          ),
+      },
+    },
+    async (args) => {
+      try {
+        const ctx = await getContext();
+        return json(
+          await getSessionBars(ctx.store, ctx.config, args.sessionId, {
+            contextBars: args.contextBars,
+          }),
+        );
       } catch (err) {
         return toolError(err);
       }

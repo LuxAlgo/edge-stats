@@ -14,6 +14,7 @@ import {
   configSchema,
   exportQuery,
   exportTable,
+  getSessionBars,
   getSessions,
   loadPresets,
   runPreset,
@@ -263,6 +264,65 @@ describe("query counts against the ledger", () => {
     );
     expect(details).toHaveLength(4);
     expect(details[0]?.features.symbol).toBe("FIX_STK");
+  });
+
+  it("session view: one session's bars from its partition, with the derived levels", async () => {
+    const r = await q("gapFill WHERE gapDir = down");
+    const ref = r.sessions.find((s) => s.tradeDate === "2024-01-11");
+    expect(ref).toBeDefined();
+    const view = await getSessionBars(store, config, ref!.sessionId);
+    const features = (await featureRows("FIX_STK")).get("2024-01-11");
+    expect(features).toBeDefined();
+
+    expect(view.sessionId).toBe("FIX_STK|rth|2024-01-11");
+    expect(view).toMatchObject({ symbol: "FIX_STK", sessionKey: "rth", tf: "1h" });
+    expect(view.tz).toBe("America/New_York");
+    expect(view.startTs).toBe(Number(features?.start_ts));
+    expect(view.endTs).toBe(Number(features?.end_ts));
+
+    // Hourly RTH: 09:30 … 15:30 is seven bars, all inside [start, end), oldest first.
+    expect(view.bars).toHaveLength(7);
+    expect(view.bars.every((b) => b.ts >= view.startTs && b.ts < view.endTs)).toBe(true);
+    expect(view.bars.map((b) => b.ts)).toEqual([...view.bars.map((b) => b.ts)].sort());
+    expect(view.bars[0]?.open).toBeCloseTo(Number(features?.open), 6);
+    expect(view.bars[6]?.close).toBeCloseTo(Number(features?.close), 6);
+
+    // Levels are the feature row's own numbers, never recomputed here.
+    expect(view.levels.prevClose).toBeCloseTo(Number(features?.prev_close), 6);
+    expect(view.levels.prevHigh).toBeCloseTo(Number(features?.prev_high), 6);
+    expect(view.levels.prevLow).toBeCloseTo(Number(features?.prev_low), 6);
+    expect(view.levels.gapDir).toBe("down");
+    expect(view.levels.gapFilled).toBe(features?.gap_filled);
+    expect(view.times.gapFillMin).toBe(features?.gap_fill_min ?? null);
+    expect(view.levels.openingRanges).toEqual([
+      expect.objectContaining({ window: 60, high: features?.or60_high, low: features?.or60_low }),
+    ]);
+
+    // Context: the tail of earlier sessions (hourly bars leave no pre-market),
+    // strictly before the open, oldest first, capped at the request.
+    expect(view.context.kind).toBe("prior-session");
+    expect(view.context.bars.length).toBeGreaterThan(0);
+    expect(view.context.bars.length).toBeLessThanOrEqual(30);
+    expect(view.context.bars.every((b) => b.ts < view.startTs)).toBe(true);
+    const small = await getSessionBars(store, config, ref!.sessionId, { contextBars: 3 });
+    expect(small.context.bars).toHaveLength(3);
+    const none = await getSessionBars(store, config, ref!.sessionId, { contextBars: 0 });
+    expect(none.context).toMatchObject({ kind: "none", bars: [] });
+    expect(view.disclaimer).toContain("Not predictions");
+  });
+
+  it("session view refuses unknown sessions and absurd context requests", async () => {
+    await expect(getSessionBars(store, config, "FIX_STK|rth|1999-01-01")).rejects.toThrow(
+      /unknown session/,
+    );
+    const r = await q("gapFill");
+    const id = r.sessions[0]!.sessionId;
+    await expect(getSessionBars(store, config, id, { contextBars: 999 })).rejects.toThrow(
+      /contextBars/,
+    );
+    await expect(getSessionBars(store, config, id, { contextBars: -1 })).rejects.toThrow(
+      /contextBars/,
+    );
   });
 
   it("is deterministic: same store, same query, identical envelope", async () => {

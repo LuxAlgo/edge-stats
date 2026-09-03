@@ -37,6 +37,21 @@ export type {
   SessionDetail,
 } from "./query/execute";
 
+export {
+  getSessionBars,
+  SESSION_BARS_DEFAULT_CONTEXT,
+  SESSION_BARS_MAX_CONTEXT,
+} from "./query/session-bars";
+export type {
+  SessionBar,
+  SessionBarsOptions,
+  SessionBarsResult,
+  SessionContext,
+  SessionLevels,
+  SessionOpeningRange,
+  SessionTimes,
+} from "./query/session-bars";
+
 export { exportQuery, exportTable } from "./query/export";
 export type { ExportFormat, ExportSummary } from "./query/export";
 

@@ -13,8 +13,10 @@ import { cors } from "hono/cors";
 import {
   DslSyntaxError,
   QueryError,
+  SESSION_BARS_MAX_CONTEXT,
   describeRegistry,
   freshness,
+  getSessionBars,
   getSessions,
   listAdapters,
   readLiveState,
@@ -48,6 +50,10 @@ const presetBodySchema = z.object({
   groupBy: z.string().optional(),
   sessionsLimit: z.number().int().optional(),
   force: z.boolean().optional(),
+});
+
+const sessionBarsQuerySchema = z.object({
+  context: z.coerce.number().int().min(0).max(SESSION_BARS_MAX_CONTEXT).optional(),
 });
 
 export function buildApp(ctx: CliContext): Hono {
@@ -111,6 +117,18 @@ export function buildApp(ctx: CliContext): Hono {
   app.post("/api/sessions", async (c) => {
     const body = z.object({ ids: z.array(z.string()).max(500) }).parse(await c.req.json());
     return c.json({ sessions: await getSessions(ctx.store, body.ids) });
+  });
+
+  // Session view: one session's bars at the store's base timeframe plus the
+  // levels the engine derived for it. Reads only the session's own
+  // (symbol, tf, year) partition, so history size never enters the cost.
+  app.get("/api/sessions/:sessionId/bars", async (c) => {
+    const { context } = sessionBarsQuerySchema.parse({ context: c.req.query("context") });
+    return c.json(
+      await getSessionBars(ctx.store, ctx.config, c.req.param("sessionId"), {
+        contextBars: context,
+      }),
+    );
   });
 
   // Live Board state: the board writes the 'live_state' meta seam every
