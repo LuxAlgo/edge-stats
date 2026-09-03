@@ -59,10 +59,10 @@ describe("candle parsing", () => {
 
 describe("URL builder (pinned)", () => {
   it("asks the vault for ascending 1m pages of 5000", () => {
-    expect(
-      lseCandlesUrl("EUR/USD", "2024-03-01T00:00:00.000Z", "2024-03-02T00:00:00.000Z", "fx"),
-    ).toBe(
-      "https://api.londonstrategicedge.com/vault/candles?symbol=EUR%2FUSD&timeframe=1m&order=asc&limit=5000&start=2024-03-01T00%3A00%3A00.000Z&end=2024-03-02T00%3A00%3A00.000Z&dataset=fx",
+    expect(lseCandlesUrl("EUR/USD", Date.UTC(2024, 2, 1), Date.UTC(2024, 2, 2), "fx")).toBe(
+      // Naive UTC seconds, no milliseconds or zone suffix: the vault
+      // answers 400 to anything else.
+      "https://api.londonstrategicedge.com/vault/candles?symbol=EUR%2FUSD&timeframe=1m&order=asc&limit=5000&start=2024-03-01T00%3A00%3A00&end=2024-03-02T00%3A00%3A00&dataset=fx",
     );
   });
 });
@@ -100,7 +100,9 @@ describe("fetch loop", () => {
     expect(headers["x-api-key"]).toBe("k");
     expect(calls[0]?.url).toContain("symbol=EUR%2FUSD");
     // The second page starts just after the last bar of the first.
-    expect(calls[1]?.url).toContain(encodeURIComponent(new Date(minute(5000) + 1).toISOString()));
+    expect(calls[1]?.url).toContain(
+      encodeURIComponent(new Date(minute(5000) + 1).toISOString().slice(0, 19)),
+    );
     expect(bars).toHaveLength(5002);
     assertWatermarkDiscipline(bars, minute(0), until);
   });

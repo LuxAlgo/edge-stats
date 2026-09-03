@@ -4,8 +4,10 @@
   sanity of what comes back. Weekends step back to Friday so the window
   always has ticks. Scheduled job; never a PR gate.
 */
-import { getHistoricalRates } from "dukascopy-node";
-import { parseDukascopyRows } from "../../packages/core/src/adapters/dukascopy";
+import {
+  defaultDukascopyFetcher,
+  parseDukascopyRows,
+} from "../../packages/core/src/adapters/dukascopy";
 
 function fail(msg: string): never {
   console.error(`DRIFT (dukascopy): ${msg}`);
@@ -19,14 +21,10 @@ while (day.getUTCDay() === 0 || day.getUTCDay() === 6) day.setUTCDate(day.getUTC
 const from = new Date(Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate(), 8, 0));
 const to = new Date(Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate(), 10, 0));
 
-const rows: unknown = await getHistoricalRates({
-  instrument: "eurusd" as never,
-  dates: { from, to },
-  timeframe: "m1",
-  format: "json",
-  volumes: true,
-  ignoreFlats: true,
-});
+// Through the adapter's own fetcher, so the canary exercises the exact
+// production path (and dukascopy-node resolves from packages/core, the
+// package that declares it — a root import would not resolve under pnpm).
+const rows: unknown = await defaultDukascopyFetcher({ instrument: "eurusd", from, to });
 
 if (!Array.isArray(rows) || rows.length === 0) {
   fail(`expected minute rows for ${from.toISOString()}..${to.toISOString()}, got none`);

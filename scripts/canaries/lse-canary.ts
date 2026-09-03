@@ -19,11 +19,7 @@ if (apiKey === undefined || apiKey === "") {
 }
 
 const end = Date.now();
-const url = lseCandlesUrl(
-  "BTC/USD",
-  new Date(end - 60 * 60_000).toISOString(),
-  new Date(end).toISOString(),
-);
+const url = lseCandlesUrl("BTC/USD", end - 60 * 60_000, end);
 const res = await fetch(url, { headers: { "x-api-key": apiKey } });
 if (!res.ok) fail(`GET ${url} → HTTP ${res.status}`);
 

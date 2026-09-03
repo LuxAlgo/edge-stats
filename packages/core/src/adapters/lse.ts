@@ -5,7 +5,10 @@
 
   GET https://api.londonstrategicedge.com/vault/candles
       ?symbol=EUR/USD&timeframe=1m&order=asc&limit=5000&start=&end=
-  with the key in an `x-api-key` header. Rows arrive as objects carrying
+  with the key in an `x-api-key` header. start/end are naive UTC
+  seconds (2026-09-03T01:57:32) — the reference client's format; the
+  vault answers 400 to ISO strings carrying milliseconds or a zone
+  suffix. Rows arrive as objects carrying
   the bar-open time (`ts` or `timestamp`, epoch or ISO) plus open, high,
   low, close, and volume (FX candles carry no consolidated volume; 0).
   5000 rows per call; the fetch loop pages forward from the watermark by
@@ -48,10 +51,15 @@ const PAGE_LIMIT = 5000;
 /** Polite pacing; streaming and download share one keyed allowance. */
 const PACE_MS = 250;
 
+/** The vault's start/end format: naive UTC seconds, no milliseconds, no zone. */
+export function lseTimeParam(ms: number): string {
+  return new Date(ms).toISOString().slice(0, 19);
+}
+
 export function lseCandlesUrl(
   symbol: string,
-  startIso: string,
-  untilIso: string,
+  startMs: number,
+  untilMs: number,
   dataset?: string,
 ): string {
   const p = new URLSearchParams({
@@ -59,8 +67,8 @@ export function lseCandlesUrl(
     timeframe: "1m",
     order: "asc",
     limit: String(PAGE_LIMIT),
-    start: startIso,
-    end: untilIso,
+    start: lseTimeParam(startMs),
+    end: lseTimeParam(untilMs),
   });
   if (dataset !== undefined) p.set("dataset", dataset);
   return `${API_BASE}/candles?${p.toString()}`;
@@ -125,17 +133,11 @@ export const lseAdapter: Adapter = {
     const { symbol, tf } = ctx.symbol;
     const vaultSymbol = opts.lseSymbol ?? symbol;
     const until = req.untilMs;
-    const untilIso = new Date(until).toISOString();
 
     let cursor = req.sinceMs ?? Date.parse(`${opts.start}T00:00:00Z`) - 1;
     let pulled = 0;
     for (;;) {
-      const url = lseCandlesUrl(
-        vaultSymbol,
-        new Date(cursor + 1).toISOString(),
-        untilIso,
-        opts.dataset,
-      );
+      const url = lseCandlesUrl(vaultSymbol, cursor + 1, until, opts.dataset);
       const res = await fetchWithRetry(url, {
         what: "lse candles",
         init: { headers: { "x-api-key": apiKey } },
