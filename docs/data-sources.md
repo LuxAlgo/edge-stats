@@ -58,7 +58,12 @@ skips any month already behind your watermark.
 ```
 
 `adapterOptions.market` defaults to `"spot"` (the only market wired up
-today).
+today). Two options exist for environments where `api.binance.com`
+refuses the region with HTTP 451 (notably US-hosted CI runners) while the
+archive CDN serves anywhere: `adapterOptions.start` (ISO date) bounds the
+first sync without the REST listing probe, and
+`adapterOptions.archiveOnly: true` skips the REST live tail, so history
+simply ends at the newest published daily archive (about a day behind).
 
 ## coinbase — keyless crypto candles
 

@@ -5,13 +5,15 @@
       "symbol": "BTCUSDT",
       "adapter": "binance",
       "assetClass": "crypto",
-      "tf": "1m"
+      "tf": "1m",
+      "adapterOptions": { "start": "2020-01-01", "archiveOnly": true }
     },
     {
       "symbol": "ETHUSDT",
       "adapter": "binance",
       "assetClass": "crypto",
-      "tf": "1m"
+      "tf": "1m",
+      "adapterOptions": { "start": "2020-01-01", "archiveOnly": true }
     }
   ],
   "pendingTermsReview": [

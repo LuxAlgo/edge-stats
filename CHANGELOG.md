@@ -30,6 +30,10 @@ uses [semantic versioning](https://semver.org/).
 
 - Dashboard restyled onto the LuxAlgo data-canvas design system (Geist,
   black canvas, one validated chart hue, prism accent).
+- `binance` adapter: new `adapterOptions.start` (first-sync bound without
+  the REST listing probe) and `archiveOnly` (never call `api.binance.com`,
+  for regions it refuses with HTTP 451) — the archive CDN covers
+  everything but the last ~day.
 
 ## 0.1.0 - 2026-08-26
 

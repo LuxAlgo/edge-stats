@@ -14,9 +14,18 @@
   Archives 404 both before a symbol's listing and after the publication
   lag at the live edge; the REST tail absorbs both ends.
 
+  api.binance.com refuses some regions (HTTP 451) — notably US-hosted CI
+  runners — while data.binance.vision is a plain CDN that serves anywhere.
+  For those environments set both options below: `start` skips the REST
+  first-listing probe and `archiveOnly` skips the REST live tail, so every
+  request goes to the archive host and history simply ends at the newest
+  published daily archive (about a day behind).
+
   adapterOptions:
     {
-      "market": "spot"        // only the spot archives are wired up today
+      "market": "spot",       // only the spot archives are wired up today
+      "start": "2020-01-01",  // first-sync lower bound; skips the REST listing probe
+      "archiveOnly": false    // true = never call api.binance.com (archive host only)
     }
 */
 import { strFromU8, unzipSync } from "fflate";
@@ -37,6 +46,11 @@ import type { Adapter, AdapterContext, FetchRequest } from "./types";
 
 const optionsSchema = z.object({
   market: z.enum(["spot"]).default("spot"),
+  start: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "use an ISO date like 2020-01-01")
+    .optional(),
+  archiveOnly: z.boolean().default(false),
 });
 
 const ARCHIVE_BASE = "https://data.binance.vision/data";
@@ -168,6 +182,8 @@ export const binanceAdapter: Adapter = {
     let cursor: number; // exclusive lower bound of what we still owe
     if (req.sinceMs !== null) {
       cursor = req.sinceMs;
+    } else if (opts.start !== undefined) {
+      cursor = Date.parse(`${opts.start}T00:00:00Z`) - 1;
     } else {
       const res = await fetchWithRetry(binanceRestUrl(symbol, 0, 1), { what: "binance klines" });
       const first = parseBinanceRestKlines(await res.json(), symbol, tf)[0];
@@ -229,7 +245,13 @@ export const binanceAdapter: Adapter = {
       await sleep(PACE_MS);
     }
 
-    // 3) REST tail to the live edge, 1000 bars per page.
+    // 3) REST tail to the live edge, 1000 bars per page. archiveOnly stops
+    //    at the newest published daily archive instead (regions where
+    //    api.binance.com answers 451).
+    if (opts.archiveOnly) {
+      ctx.log(`binance: ${symbol} archiveOnly — tail resumes with the next daily archive`);
+      return;
+    }
     while (cursor < until) {
       const res = await fetchWithRetry(binanceRestUrl(symbol, cursor + 1), {
         what: "binance klines",
