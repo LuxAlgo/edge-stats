@@ -11,16 +11,19 @@ ever mention the env var _names_. Keys stay on your box.
 
 `edgestats adapters` lists everything below straight from the registry.
 
-| Adapter     | Covers                                    | Cost model (the vendor's, not ours)                                                       | Env keys                             |
-| ----------- | ----------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
-| `csv`       | Anything you can export to a file         | —                                                                                         | —                                    |
-| `synthetic` | Deterministic demo bars                   | —                                                                                         | —                                    |
-| `binance`   | Binance spot crypto, full 1m history      | Free, keyless (public archives + public REST)                                             | —                                    |
-| `coinbase`  | Coinbase Exchange crypto, 1m candles      | Free, keyless (public endpoint, rate-limited)                                             | —                                    |
-| `alpaca`    | US equities/ETFs, 1m bars (IEX free tier) | Free tier for IEX feed; SIP per Alpaca's plans — check their pricing page                 | `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY` |
-| `databento` | CME futures (GLBX.MDP3), continuous 1m    | Pay-as-you-go, metered per pull — **built-in cost preflight, capped**                     | `DATABENTO_API_KEY`                  |
-| `massive`   | Massive flat files from disk              | Per your Massive subscription — files you already downloaded cost nothing extra to import | `MASSIVE_API_KEY` (future REST only) |
-| IBKR        | _(planned — see below)_                   |                                                                                           |                                      |
+| Adapter       | Covers                                                                                | Cost model (the vendor's, not ours)                                                       | Env keys                             |
+| ------------- | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
+| `csv`         | Anything you can export to a file                                                     | —                                                                                         | —                                    |
+| `synthetic`   | Deterministic demo bars                                                               | —                                                                                         | —                                    |
+| `binance`     | Binance spot crypto, full 1m history                                                  | Free, keyless (public archives + public REST)                                             | —                                    |
+| `coinbase`    | Coinbase Exchange crypto, 1m candles                                                  | Free, keyless (public endpoint, rate-limited)                                             | —                                    |
+| `alpaca`      | US equities/ETFs, 1m bars (IEX free tier)                                             | Free tier for IEX feed; SIP per Alpaca's plans — check their pricing page                 | `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY` |
+| `databento`   | CME futures (GLBX.MDP3), continuous 1m                                                | Pay-as-you-go, metered per pull — **built-in cost preflight, capped**                     | `DATABENTO_API_KEY`                  |
+| `massive`     | Massive flat files from disk                                                          | Per your Massive subscription — files you already downloaded cost nothing extra to import | `MASSIVE_API_KEY` (future REST only) |
+| `lse`         | Stocks, FX, crypto, commodities, indices, ETFs, futures — deep multi-asset 1m history | Free, one free API key                                                                    | `LSE_API_KEY`                        |
+| `dukascopy`   | FX, index CFDs, commodities, crypto — deep 1m history                                 | Free, keyless (public tick archive)                                                       | —                                    |
+| `hyperliquid` | Hyperliquid perp crypto, live 1m tail                                                 | Free, keyless (venue retains ~5000 candles per interval)                                  | —                                    |
+| IBKR          | _(planned — see below)_                                                               |                                                                                           |                                      |
 
 All examples below are `symbols[]` entries for `edge-stats.config.json`.
 After editing the config, `edgestats sync` pulls from each symbol's
@@ -55,7 +58,12 @@ skips any month already behind your watermark.
 ```
 
 `adapterOptions.market` defaults to `"spot"` (the only market wired up
-today).
+today). Two options exist for environments where `api.binance.com`
+refuses the region with HTTP 451 (notably US-hosted CI runners) while the
+archive CDN serves anywhere: `adapterOptions.start` (ISO date) bounds the
+first sync without the REST listing probe, and
+`adapterOptions.archiveOnly: true` skips the REST live tail, so history
+simply ends at the newest published daily archive (about a day behind).
 
 ## coinbase — keyless crypto candles
 
@@ -163,6 +171,85 @@ A direct REST pull (behind `MASSIVE_API_KEY`) is a **documented TODO**:
 the endpoint shape is still being verified, and the adapter says so
 explicitly rather than guessing URLs. Flat files are the supported path
 today.
+
+## lse — free multi-asset history with one free key
+
+The [London Strategic Edge](https://londonstrategicedge.com/data) vault
+serves 1-minute candles across stocks, FX, crypto, commodities, indices,
+ETFs, and futures — US stocks back to 2003, FX to 2009, crypto to 2017 —
+behind a single free API key. This is the broadest free backfill source
+Edge Stats has: one key covers asset classes that otherwise each need
+their own vendor. The adapter pages 5000 candles per call forward from
+your watermark. Export `LSE_API_KEY`; it travels only as an `x-api-key`
+header to the vault.
+
+```json
+{
+  "symbol": "EURUSD",
+  "adapter": "lse",
+  "assetClass": "fx",
+  "tf": "1m",
+  "adapterOptions": { "lseSymbol": "EUR/USD" }
+}
+```
+
+`adapterOptions.lseSymbol` maps your store symbol to the vault's naming
+(e.g. `EUR/USD`) when they differ; `adapterOptions.start` (default
+`2009-01-01`) bounds the first sync; `adapterOptions.dataset` pins an
+asset class when one symbol exists in several. FX candles carry no
+consolidated volume, so volume-based fields are not meaningful on FX
+synced from this source.
+
+## dukascopy — keyless FX and CFD history
+
+The public Dukascopy datafeed is a tick archive reaching back to the
+2000s for major FX pairs, fetched and aggregated to 1-minute bars through
+the MIT-licensed [`dukascopy-node`](https://www.dukascopy-node.app/)
+library. No account, no key, no cost. The adapter pulls 7-day windows
+forward from your watermark so multi-year backfills stay memory-bounded;
+weekend windows legitimately return nothing.
+
+Two honesty notes, because statistics are only as honest as their data
+labels: volumes here are the feed's per-side tick volumes, not
+consolidated market volume, and index or commodity symbols are
+Dukascopy's CFD pricing of those markets, not exchange prints. Session
+shape statistics are robust to both, but you should know what you are
+looking at.
+
+```json
+{
+  "symbol": "EURUSD",
+  "adapter": "dukascopy",
+  "assetClass": "fx",
+  "tf": "1m"
+}
+```
+
+`adapterOptions.instrument` (default: the store symbol lowercased) is the
+dukascopy-node instrument id; `adapterOptions.start` (default
+`2010-01-01`) bounds the first sync.
+
+## hyperliquid — keyless perp crypto tail
+
+Hyperliquid's public info endpoint serves 1-minute perp candles with no
+key, but only the most recent ~5000 candles per interval — about 3.5 days
+of minutes. This adapter is therefore a **tail source**: a daily
+`edgestats sync` accumulates history forward from the day you start, and
+it covers perp symbols no spot exchange lists. For deep 1m backfill use
+`lse` or `binance` on the equivalent spot pair and let `hyperliquid` keep
+the perp fresh.
+
+```json
+{
+  "symbol": "BTC",
+  "adapter": "hyperliquid",
+  "assetClass": "crypto",
+  "tf": "1m"
+}
+```
+
+`adapterOptions.coin` maps your store symbol to the Hyperliquid coin name
+when they differ.
 
 ## IBKR (planned)
 

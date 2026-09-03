@@ -24,11 +24,25 @@ uses [semantic versioning](https://semver.org/).
   `edgestats serve`, and the `edge_session_bars` MCP tool; each reads one
   session from its own (symbol, timeframe, year) partition, so history size
   does not affect it.
+- Three free-data adapters: `lse` (London Strategic Edge vault, multi-asset
+  1m history behind one free key), `dukascopy` (keyless FX/CFD history via
+  the public Dukascopy tick archive and the MIT `dukascopy-node` library),
+  and `hyperliquid` (keyless perp crypto tail from the public info
+  endpoint), each with tests and a daily schema canary.
+- Hosted derived store: a nightly workflow builds the hosted symbol list
+  with the real engine and publishes derived session statistics (manifest,
+  preset result envelopes, and the derived `.duckdb`) to the rolling
+  `hosted-store` release. No raw vendor bars are published; see
+  docs/hosted-store.md.
 
 ### Changed
 
 - Dashboard restyled onto the LuxAlgo data-canvas design system (Geist,
   black canvas, one validated chart hue, prism accent).
+- `binance` adapter: new `adapterOptions.start` (first-sync bound without
+  the REST listing probe) and `archiveOnly` (never call `api.binance.com`,
+  for regions it refuses with HTTP 451) — the archive CDN covers
+  everything but the last ~day.
 
 ## 0.1.0 - 2026-08-26
 

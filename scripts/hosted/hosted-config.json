@@ -1,0 +1,56 @@
+{
+  "note": "Symbol list for the nightly hosted derived store (.github/workflows/hosted-store.yml). Only `enabled` symbols are built and published. Symbols under `pendingTermsReview` are wired and ready but stay out of the build until a human has read that vendor's data redistribution terms and moved the entry to `enabled` — the artifact publishes derived session statistics, never raw bars, but that call belongs to a person.",
+  "enabled": [
+    {
+      "symbol": "BTCUSDT",
+      "adapter": "binance",
+      "assetClass": "crypto",
+      "tf": "1m",
+      "adapterOptions": { "start": "2020-01-01", "archiveOnly": true }
+    },
+    {
+      "symbol": "ETHUSDT",
+      "adapter": "binance",
+      "assetClass": "crypto",
+      "tf": "1m",
+      "adapterOptions": { "start": "2020-01-01", "archiveOnly": true }
+    }
+  ],
+  "pendingTermsReview": [
+    {
+      "symbol": "EURUSD",
+      "adapter": "dukascopy",
+      "assetClass": "forex",
+      "tf": "1m",
+      "adapterOptions": { "start": "2015-01-01" }
+    },
+    {
+      "symbol": "XAUUSD",
+      "adapter": "dukascopy",
+      "assetClass": "forex",
+      "tf": "1m",
+      "adapterOptions": { "start": "2015-01-01" }
+    },
+    {
+      "symbol": "SPY",
+      "adapter": "alpaca",
+      "assetClass": "equity",
+      "tf": "1m",
+      "adapterOptions": { "feed": "iex" }
+    },
+    {
+      "symbol": "QQQ",
+      "adapter": "alpaca",
+      "assetClass": "equity",
+      "tf": "1m",
+      "adapterOptions": { "feed": "iex" }
+    },
+    {
+      "symbol": "EURUSD_LSE",
+      "adapter": "lse",
+      "assetClass": "forex",
+      "tf": "1m",
+      "adapterOptions": { "lseSymbol": "EUR/USD" }
+    }
+  ]
+}

@@ -6,9 +6,10 @@
 # Scheduled + manual only. Do NOT add these jobs to branch protection or
 # required PR checks — a vendor hiccup must never block a merge.
 #
-# Keyed vendors (alpaca, databento, massive) skip with exit 0 when their
-# repo secret is absent; secrets are exposed to exactly one job each and
-# only ever travel as request headers — never in URLs, logs, or artifacts.
+# Keyed vendors (alpaca, databento, massive, lse) skip with exit 0 when
+# their repo secret is absent; secrets are exposed to exactly one job each
+# and only ever travel as request headers — never in URLs, logs, or
+# artifacts.
 name: adapter-canaries
 
 on:
@@ -88,3 +89,44 @@ jobs:
       - run: pnpm exec tsx scripts/canaries/massive-canary.ts
         env:
           MASSIVE_API_KEY: ${{ secrets.MASSIVE_API_KEY }}
+
+  lse:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/canaries/lse-canary.ts
+        env:
+          LSE_API_KEY: ${{ secrets.LSE_API_KEY }}
+
+  hyperliquid:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/canaries/hyperliquid-canary.ts
+
+  dukascopy:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/canaries/dukascopy-canary.ts

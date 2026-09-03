@@ -230,4 +230,36 @@ describe("fetchBars walks monthly → daily → REST with watermark discipline",
       collect(binanceAdapter.fetchBars(ctx, { sinceMs: null, untilMs: Date.UTC(2024, 0, 2) })),
     ).rejects.toThrow(/"tf": "1m"/);
   });
+
+  it("start + archiveOnly never touch api.binance.com (regions where it answers 451)", async () => {
+    const untilMs = feb2(0, 2);
+    const dailyZip = zipOf(
+      "BTCUSDT-1m-2024-02-01.csv",
+      klineCsv([
+        [feb1(0, 0), 1, 2, 0.5, 1.5, 10],
+        [feb1(0, 1), 1, 2, 0.5, 1.5, 10],
+      ]),
+    );
+    const { calls } = stubFetch((url) => {
+      if (url.startsWith("https://api.binance.com")) {
+        throw new Error(`archiveOnly must not call the REST host: ${url}`);
+      }
+      if (url.includes("BTCUSDT-1m-2024-02.zip")) return textResponse("", 404);
+      if (url.includes("BTCUSDT-1m-2024-02-01.zip")) return bytesResponse(dailyZip);
+      if (url.includes("BTCUSDT-1m-2024-02-02.zip")) return textResponse("", 404);
+      throw new Error(`unexpected fetch: ${url}`);
+    });
+
+    const ctx = makeCtx({
+      symbol: "BTCUSDT",
+      adapter: "binance",
+      adapterOptions: { start: "2024-02-01", archiveOnly: true },
+    });
+    const { bars } = await collect(binanceAdapter.fetchBars(ctx, { sinceMs: null, untilMs }));
+    // History starts at the configured date (no REST listing probe) and
+    // ends at the newest published daily archive (no REST tail).
+    expect(bars.map((b) => b.ts)).toEqual([feb1(0, 0), feb1(0, 1)]);
+    expect(calls.every((c) => c.url.startsWith("https://data.binance.vision"))).toBe(true);
+    assertWatermarkDiscipline(bars, null, untilMs);
+  });
 });

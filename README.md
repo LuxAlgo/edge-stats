@@ -103,15 +103,18 @@ Session boundaries are computed in exchange time through the IANA timezone datab
 
 Edge Stats computes on data you already have or license. Every adapter normalizes into the same local store; [docs/data-sources.md](docs/data-sources.md) documents each path.
 
-| Adapter     | Covers                               | Vendor cost                            | Env keys                             |
-| ----------- | ------------------------------------ | -------------------------------------- | ------------------------------------ |
-| `csv`       | Anything you can export to a file    | none                                   | none                                 |
-| `synthetic` | Deterministic demo bars              | none                                   | none                                 |
-| `binance`   | Binance spot crypto, full 1m history | free, keyless                          | none                                 |
-| `coinbase`  | Coinbase Exchange crypto, 1m candles | free, keyless                          | none                                 |
-| `alpaca`    | US equities and ETFs, 1m bars        | free tier (IEX feed)                   | `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY` |
-| `databento` | CME futures, continuous 1m           | pay as you go, with a capped preflight | `DATABENTO_API_KEY`                  |
-| `massive`   | Massive flat files from disk         | covered by your existing subscription  | none for flat files                  |
+| Adapter       | Covers                                                  | Vendor cost                            | Env keys                             |
+| ------------- | ------------------------------------------------------- | -------------------------------------- | ------------------------------------ |
+| `csv`         | Anything you can export to a file                       | none                                   | none                                 |
+| `synthetic`   | Deterministic demo bars                                 | none                                   | none                                 |
+| `binance`     | Binance spot crypto, full 1m history                    | free, keyless                          | none                                 |
+| `coinbase`    | Coinbase Exchange crypto, 1m candles                    | free, keyless                          | none                                 |
+| `alpaca`      | US equities and ETFs, 1m bars                           | free tier (IEX feed)                   | `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY` |
+| `databento`   | CME futures, continuous 1m                              | pay as you go, with a capped preflight | `DATABENTO_API_KEY`                  |
+| `massive`     | Massive flat files from disk                            | covered by your existing subscription  | none for flat files                  |
+| `lse`         | Stocks, FX, crypto, commodities, indices, ETFs, futures | free, one free key                     | `LSE_API_KEY`                        |
+| `dukascopy`   | FX, index CFDs, commodities, crypto                     | free, keyless                          | none                                 |
+| `hyperliquid` | Hyperliquid perp crypto, live tail                      | free, keyless                          | none                                 |
 
 The `csv` adapter covers anything not listed: if your source can export a file, Edge Stats can compute on it. A daily [adapter-canaries](.github/workflows/adapter-canaries.yml) workflow pulls a small sample from each vendor and fails on schema drift.
 
@@ -145,7 +148,7 @@ That second line is your realized day-win rate on NR7 sessions, with its N and 9
 
 Typical flow: `edge_freshness`, then `edge_fields`, then `edge_query`, then `edge_sessions` for the underlying sessions, then `edge_session_bars` to look at the bars behind one of them. That last call reads only the session's own (symbol, timeframe, year) partition, so it costs the same on ten years of history as on ten days.
 
-This local server exists because your store lives on your disk, where no hosted service can reach. Hosted access to the same engine over LuxAlgo-maintained data, inside the main [LuxAlgo MCP](https://www.luxalgo.com), is planned; the tool shapes are the same.
+This local server exists because your store lives on your disk, where no hosted service can reach. For zero-setup access, a nightly workflow publishes a hosted derived store (session statistics only, never raw bars) that the main LuxAlgo MCP serves as hosted `edge_*` tools; [docs/hosted-store.md](docs/hosted-store.md) documents what is published and how to consume it directly.
 
 ## Presets
 
@@ -165,7 +168,7 @@ Coming from a report site? [docs/coming-from-edgeful.md](docs/coming-from-edgefu
 
 ```bash
 pnpm install
-pnpm test:run        # golden sessions, calendar edge cases, DSL, stats: 214 tests
+pnpm test:run        # golden sessions, calendar edge cases, DSL, stats: 233 tests
 pnpm typecheck && pnpm --filter @luxalgo/edge-stats-web typecheck
 pnpm lint --max-warnings 0
 pnpm edgestats --dir .ci-demo init --demo && pnpm edgestats --dir .ci-demo bench
