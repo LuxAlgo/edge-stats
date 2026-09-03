@@ -83,6 +83,20 @@ export class Store {
     return join(this.dataDir, "tmp");
   }
 
+  /**
+   * The parquet globs for (symbol, tf) in the given years, existing
+   * partitions only. Reading through these instead of the `bars` view is
+   * how a per-session read stays independent of the size of the history.
+   */
+  barPartitionGlobs(symbol: string, tf: string, years: number[]): string[] {
+    const globs: string[] = [];
+    for (const year of new Set(years)) {
+      const dir = join(this.barsDir, `symbol=${symbol}`, `tf=${tf}`, `year=${year}`);
+      if (existsSync(dir)) globs.push(join(dir, "*.parquet"));
+    }
+    return globs;
+  }
+
   async run(sql: string): Promise<void> {
     await this.conn.run(sql);
   }
