@@ -1,0 +1,57 @@
+# Nightly hosted-store build: sync the hosted symbol list
+# (scripts/hosted/hosted-config.json) with the ordinary adapters, derive
+# session features, run the full preset catalog through the real engine,
+# and publish three artifacts to the rolling `hosted-store` release:
+# manifest.json, results.json, derived.duckdb.
+#
+# Deliberately published: derived session statistics only. Raw vendor bars
+# never leave the runner — they live in parquet outside the .duckdb file
+# and are not uploaded. Keyed vendors are skipped when their secret is
+# absent; secrets only ever travel as request headers to their vendor.
+#
+# The hosted LuxAlgo MCP server reads these assets; anyone else can too
+# (they are plain public release downloads). See docs/hosted-store.md.
+name: hosted-store
+
+on:
+  schedule:
+    - cron: "47 3 * * *" # nightly, 03:47 UTC — off the top of the hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hosted-store
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/hosted/build-hosted-store.ts
+        env:
+          ALPACA_KEY_ID: ${{ secrets.ALPACA_KEY_ID }}
+          ALPACA_SECRET_KEY: ${{ secrets.ALPACA_SECRET_KEY }}
+          LSE_API_KEY: ${{ secrets.LSE_API_KEY }}
+      - name: Publish to the rolling hosted-store release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view hosted-store --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create hosted-store --repo "$GITHUB_REPOSITORY" \
+              --title "Hosted derived store (nightly)" \
+              --notes "Rolling nightly artifact: derived session statistics for the hosted symbol list, rebuilt and replaced every night. No raw vendor bars are published. See docs/hosted-store.md for what each asset contains." \
+              --latest=false
+          gh release upload hosted-store --repo "$GITHUB_REPOSITORY" --clobber \
+            .hosted-build/out/manifest.json \
+            .hosted-build/out/results.json \
+            .hosted-build/out/derived.duckdb

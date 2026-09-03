@@ -8,6 +8,7 @@ coverage/
 # local stores created by `edgestats init` (DuckDB + parquet + config copies)
 .edge-stats/
 .ci-demo/
+.hosted-build/
 *.duckdb
 *.duckdb.wal
 

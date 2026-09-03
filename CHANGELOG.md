@@ -20,6 +20,11 @@ uses [semantic versioning](https://semver.org/).
   the public Dukascopy tick archive and the MIT `dukascopy-node` library),
   and `hyperliquid` (keyless perp crypto tail from the public info
   endpoint), each with tests and a daily schema canary.
+- Hosted derived store: a nightly workflow builds the hosted symbol list
+  with the real engine and publishes derived session statistics (manifest,
+  preset result envelopes, and the derived `.duckdb`) to the rolling
+  `hosted-store` release. No raw vendor bars are published; see
+  docs/hosted-store.md.
 
 ### Changed
 

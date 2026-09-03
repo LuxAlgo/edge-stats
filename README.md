@@ -135,7 +135,7 @@ That second line is your realized day-win rate on NR7 sessions, with its N and 9
 
 Typical flow: `edge_freshness`, then `edge_fields`, then `edge_query`, then `edge_sessions` for the underlying sessions.
 
-This local server exists because your store lives on your disk, where no hosted service can reach. Hosted access to the same engine over LuxAlgo-maintained data, inside the main [LuxAlgo MCP](https://www.luxalgo.com), is planned; the tool shapes are the same.
+This local server exists because your store lives on your disk, where no hosted service can reach. For zero-setup access, a nightly workflow publishes a hosted derived store (session statistics only, never raw bars) that the main LuxAlgo MCP serves as hosted `edge_*` tools; [docs/hosted-store.md](docs/hosted-store.md) documents what is published and how to consume it directly.
 
 ## Presets
 
