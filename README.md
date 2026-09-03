@@ -70,6 +70,18 @@ For real data, `edgestats adapters` lists every source and the env keys each one
 
 Report cards, a query builder that shows the live DSL string, per-report filter pages, a live board, and drill-down from any number to the sessions behind it. The full query is encoded in the URL, so any view can be shared and reproduced.
 
+## Session view: see the bars behind the number
+
+<p align="center">
+  <img src="docs/media/session-view.png" alt="Session view: one DEMO_STK session's 1-minute bars on a Vela chart with the prior high, low, and close, the session open, the gap band between prior close and open, and a marker where the gap filled at 15:19" width="920">
+</p>
+
+<p align="center"><sub>The synthetic demo store (<code>edgestats init --demo</code>): a session from the gap-fill report on DEMO_STK, gap band between the prior close and the open, the fill marked at 15:19. Not real market data.</sub></p>
+
+Every result lists the sessions it counted, and any of them opens in a session view: that session's 1-minute bars with the query's levels drawn over them, the prior session's high, low, and close, the session open, the opening range for opening-range outcomes, the gap band between the prior close and the open, and a marker at the moment the outcome happened ("filled 15:19", "broke up 09:59"). A "gap filled 80%" is a claim about sessions; this is where you pick one and look. Older and newer step through the matched sessions.
+
+It opens one session at a time, and the bars are read from that session's own (symbol, timeframe, year) parquet partition, so the size of your history has no effect on it: a session out of ten years of 1-minute bars costs the same as one out of ten days. The chart is drawn in the browser by [Vela](https://github.com/LuxAlgo/Vela), LuxAlgo's open-source charting library (Apache-2.0), loaded only when a session view opens; until then the dashboard bundle is unchanged. It is a verification tool, not a signal: it shows what one session did, it predicts nothing. Agents get the same bars and levels from the `edge_session_bars` MCP tool.
+
 ## Statistical honesty
 
 Every result carries the same envelope, in the CLI, the dashboard, the API, and over MCP:
@@ -153,7 +165,7 @@ Coming from a report site? [docs/coming-from-edgeful.md](docs/coming-from-edgefu
 
 ```bash
 pnpm install
-pnpm test:run        # golden sessions, calendar edge cases, DSL, stats: 196 tests
+pnpm test:run        # golden sessions, calendar edge cases, DSL, stats: 214 tests
 pnpm typecheck && pnpm --filter @luxalgo/edge-stats-web typecheck
 pnpm lint --max-warnings 0
 pnpm edgestats --dir .ci-demo init --demo && pnpm edgestats --dir .ci-demo bench

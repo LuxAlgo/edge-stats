@@ -15,6 +15,15 @@ uses [semantic versioning](https://semver.org/).
 - `eventOccurs(event)` outcome: any event calendar (macro or trade tags) as
   a rate under arbitrary conditions.
 - `edge_trades` MCP tool reporting the store's trade tags.
+- Session view: from any result, open the bars behind one matched session
+  on a [Vela](https://github.com/LuxAlgo/Vela) chart with the query's
+  levels drawn (prior high/low/close, session open, opening range, gap
+  band) and a marker at the outcome time, with older/newer navigation
+  across the matched sessions. Vela is lazy-loaded only when a view opens.
+  Backed by `getSessionBars` in core, `GET /api/sessions/:id/bars` on
+  `edgestats serve`, and the `edge_session_bars` MCP tool; each reads one
+  session from its own (symbol, timeframe, year) partition, so history size
+  does not affect it.
 
 ### Changed
 
