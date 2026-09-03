@@ -15,6 +15,11 @@ uses [semantic versioning](https://semver.org/).
 - `eventOccurs(event)` outcome: any event calendar (macro or trade tags) as
   a rate under arbitrary conditions.
 - `edge_trades` MCP tool reporting the store's trade tags.
+- Three free-data adapters: `lse` (London Strategic Edge vault, multi-asset
+  1m history behind one free key), `dukascopy` (keyless FX/CFD history via
+  the public Dukascopy tick archive and the MIT `dukascopy-node` library),
+  and `hyperliquid` (keyless perp crypto tail from the public info
+  endpoint), each with tests and a daily schema canary.
 
 ### Changed
 

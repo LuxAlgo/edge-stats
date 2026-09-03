@@ -91,15 +91,18 @@ Session boundaries are computed in exchange time through the IANA timezone datab
 
 Edge Stats computes on data you already have or license. Every adapter normalizes into the same local store; [docs/data-sources.md](docs/data-sources.md) documents each path.
 
-| Adapter     | Covers                               | Vendor cost                            | Env keys                             |
-| ----------- | ------------------------------------ | -------------------------------------- | ------------------------------------ |
-| `csv`       | Anything you can export to a file    | none                                   | none                                 |
-| `synthetic` | Deterministic demo bars              | none                                   | none                                 |
-| `binance`   | Binance spot crypto, full 1m history | free, keyless                          | none                                 |
-| `coinbase`  | Coinbase Exchange crypto, 1m candles | free, keyless                          | none                                 |
-| `alpaca`    | US equities and ETFs, 1m bars        | free tier (IEX feed)                   | `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY` |
-| `databento` | CME futures, continuous 1m           | pay as you go, with a capped preflight | `DATABENTO_API_KEY`                  |
-| `massive`   | Massive flat files from disk         | covered by your existing subscription  | none for flat files                  |
+| Adapter       | Covers                                                  | Vendor cost                            | Env keys                             |
+| ------------- | ------------------------------------------------------- | -------------------------------------- | ------------------------------------ |
+| `csv`         | Anything you can export to a file                       | none                                   | none                                 |
+| `synthetic`   | Deterministic demo bars                                 | none                                   | none                                 |
+| `binance`     | Binance spot crypto, full 1m history                    | free, keyless                          | none                                 |
+| `coinbase`    | Coinbase Exchange crypto, 1m candles                    | free, keyless                          | none                                 |
+| `alpaca`      | US equities and ETFs, 1m bars                           | free tier (IEX feed)                   | `ALPACA_KEY_ID`, `ALPACA_SECRET_KEY` |
+| `databento`   | CME futures, continuous 1m                              | pay as you go, with a capped preflight | `DATABENTO_API_KEY`                  |
+| `massive`     | Massive flat files from disk                            | covered by your existing subscription  | none for flat files                  |
+| `lse`         | Stocks, FX, crypto, commodities, indices, ETFs, futures | free, one free key                     | `LSE_API_KEY`                        |
+| `dukascopy`   | FX, index CFDs, commodities, crypto                     | free, keyless                          | none                                 |
+| `hyperliquid` | Hyperliquid perp crypto, live tail                      | free, keyless                          | none                                 |
 
 The `csv` adapter covers anything not listed: if your source can export a file, Edge Stats can compute on it. A daily [adapter-canaries](.github/workflows/adapter-canaries.yml) workflow pulls a small sample from each vendor and fails on schema drift.
 
