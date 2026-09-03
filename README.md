@@ -116,7 +116,7 @@ That second line is your realized day-win rate on NR7 sessions, with its N and 9
 
 ## MCP
 
-`@luxalgo/edge-stats-mcp` (stdio and streamable HTTP) exposes the engine to agents through nine read-only tools:
+`@luxalgo/edge-stats-mcp` (stdio and streamable HTTP) exposes the engine to agents through ten read-only tools:
 
 | Tool                | Returns                                                               |
 | ------------------- | --------------------------------------------------------------------- |
@@ -126,11 +126,12 @@ That second line is your realized day-win rate on NR7 sessions, with its N and 9
 | `edge_report`       | A preset from the catalog, with parameters                            |
 | `edge_reports_list` | The catalog, with parameter specs                                     |
 | `edge_sessions`     | The historical sessions behind a result                               |
+| `edge_session_bars` | One session's bars with the levels the engine derived for it          |
 | `edge_live`         | Live Board state: forming, active, and resolved setups                |
 | `edge_trades`       | Which trade tags your imported trades produced, and how to query them |
 | `edge_export`       | CSV or parquet written locally, path returned                         |
 
-Typical flow: `edge_freshness`, then `edge_fields`, then `edge_query`, then `edge_sessions` for the underlying sessions.
+Typical flow: `edge_freshness`, then `edge_fields`, then `edge_query`, then `edge_sessions` for the underlying sessions, then `edge_session_bars` to look at the bars behind one of them. That last call reads only the session's own (symbol, timeframe, year) partition, so it costs the same on ten years of history as on ten days.
 
 This local server exists because your store lives on your disk, where no hosted service can reach. Hosted access to the same engine over LuxAlgo-maintained data, inside the main [LuxAlgo MCP](https://www.luxalgo.com), is planned; the tool shapes are the same.
 
