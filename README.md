@@ -2,12 +2,15 @@
   <img src="docs/media/banner.png" alt="Edge Stats" width="920">
 </p>
 
+<h1 align="center">Edge Stats</h1>
+
 <p align="center">
   Ask how often a trading setup actually worked, on your own market data.<br>
   Every answer is one query, <code>P(outcome | conditions)</code>, with the sample size and confidence interval attached.
 </p>
 
 <p align="center">
+  <a href="https://www.luxalgo.com/edge-stats/">Homepage</a> ·
   <a href="#quickstart">Quickstart</a> ·
   <a href="docs/catalog.md">Catalog</a> ·
   <a href="docs/data-sources.md">Data sources</a> ·
@@ -22,7 +25,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-4f7cff" alt="MIT license"></a>
 </p>
 
-Edge Stats is a [LuxAlgo](https://www.luxalgo.com) open source project. Official repository: [github.com/LuxAlgo/edge-stats](https://github.com/LuxAlgo/edge-stats).
+Edge Stats is a [LuxAlgo](https://www.luxalgo.com) open source project.
 
 ---
 
@@ -80,7 +83,7 @@ Report cards, a query builder that shows the live DSL string, per-report filter 
 
 Every result lists the sessions it counted, and any of them opens in a session view: that session's 1-minute bars with the query's levels drawn over them, the prior session's high, low, and close, the session open, the opening range for opening-range outcomes, the gap band between the prior close and the open, and a marker at the moment the outcome happened ("filled 15:19", "broke up 09:59"). A "gap filled 80%" is a claim about sessions; this is where you pick one and look. Older and newer step through the matched sessions.
 
-It opens one session at a time, and the bars are read from that session's own (symbol, timeframe, year) parquet partition, so the size of your history has no effect on it: a session out of ten years of 1-minute bars costs the same as one out of ten days. The chart is drawn in the browser by [Vela](https://github.com/LuxAlgo/Vela), LuxAlgo's open-source charting library (Apache-2.0), loaded only when a session view opens; until then the dashboard bundle is unchanged. It is a verification tool, not a signal: it shows what one session did, it predicts nothing. Agents get the same bars and levels from the `edge_session_bars` MCP tool.
+It opens one session at a time, and the bars are read from that session's own (symbol, timeframe, year) parquet partition, so the size of your history has no effect on it: a session out of ten years of 1-minute bars costs the same as one out of ten days. The chart is drawn in the browser by [Vela™](https://github.com/LuxAlgo/Vela), LuxAlgo's open-source charting library (Apache-2.0), loaded only when a session view opens; until then the dashboard bundle is unchanged. It is a verification tool, not a signal: it shows what one session did, it predicts nothing. Agents get the same bars and levels from the `edge_session_bars` MCP tool.
 
 ## Statistical honesty
 

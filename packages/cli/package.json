@@ -18,6 +18,7 @@
     "url": "https://github.com/LuxAlgo/edge-stats",
     "directory": "packages/cli"
   },
+  "homepage": "https://www.luxalgo.com/edge-stats/",
   "dependencies": {
     "@hono/node-server": "^2.1.1",
     "@luxalgo/broker-sdk": "^0.3.0",

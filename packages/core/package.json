@@ -15,6 +15,7 @@
     "url": "https://github.com/LuxAlgo/edge-stats",
     "directory": "packages/core"
   },
+  "homepage": "https://www.luxalgo.com/edge-stats/",
   "dependencies": {
     "@duckdb/node-api": "^1.5.5-r.4",
     "dukascopy-node": "^1.50.0",
