@@ -10,12 +10,21 @@ import { syncEventsIntoStore } from "./events";
 import { deriveFeatures } from "./features/derive";
 import type { Store } from "./store/store";
 
+/*
+  Tail adapters (hyperliquid among others) serve the last bar still forming.
+  Once the watermark advances past it, ingestBars filters it out forever and
+  its final version is never re-fetched, so the default upper bound stops a
+  couple of minutes short of now: the forming bar stays beyond the watermark
+  and is re-served, now closed, by the next sync.
+*/
+const LIVE_BAR_GUARD_MS = 120_000;
+
 export interface SyncOptions {
   symbols?: string[];
   /** Ignore watermarks and re-pull from scratch (drops the symbol's bars first). */
   full?: boolean;
   log?: (msg: string) => void;
-  /** Upper bound for pulls (default: now). Fixed in tests for determinism. */
+  /** Upper bound for pulls (default: now - LIVE_BAR_GUARD_MS). Fixed in tests for determinism. */
   untilMs?: number;
 }
 
@@ -40,7 +49,7 @@ export async function syncSymbols(
 ): Promise<SyncSummary> {
   const log = opts.log ?? (() => {});
   const resolver = makeSessionResolver(config, store.dataDir);
-  const untilMs = opts.untilMs ?? Date.now();
+  const untilMs = opts.untilMs ?? Date.now() - LIVE_BAR_GUARD_MS;
   const targets = config.symbols.filter((s) => !opts.symbols || opts.symbols.includes(s.symbol));
 
   const summaries: SymbolSyncSummary[] = [];
